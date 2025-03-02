@@ -1,0 +1,12 @@
+ion-item {
+    --background: transparent;
+    --border-radius: 10px;
+    width: 100%; // Asegura que los inputs ocupen todo el ancho disponible
+  }
+  
+  .input-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px; // Reduce espacio entre inputs
+    width: 100%;
+  }

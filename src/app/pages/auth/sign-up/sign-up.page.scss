@@ -1,0 +1,61 @@
+.sign-up-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    background-color: #f4f4f4;
+  }
+  
+  .sign-up-card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sign-up-content {
+    padding: 20px;
+  }
+  
+  .logo-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+  }
+  
+  .sign-up-button {
+    width: 100%;
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    height: 45px;
+  }
+  
+  .sign-up-register {
+    width: 100%;
+    margin-top: 10px;
+    background-color: transparent;
+    color: #3880ff;
+    font-weight: bold;
+    height: 45px;
+  }
+  
+  .validators {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  .extra-options {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+  
+    a {
+      color: #3880ff;
+      text-decoration: none;
+    }
+  }
+  

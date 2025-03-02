@@ -1,0 +1,80 @@
+<app-header title="Registrarse"></app-header>
+
+<div class="sign-up-container">
+  <ion-card class="sign-up-card">
+    <div class="logo-title-container">
+      <app-logo class="logo"></app-logo>
+    </div>
+
+    <ion-card-content class="sign-up-content">
+      <form [formGroup]="form" (ngSubmit)="openConfirmationModal()">
+        
+        <app-custom-input 
+          name="Nombre" 
+          autocomplete="name" 
+          [control]="form.controls.name" 
+          icon="person-outline" 
+          type="text">
+        </app-custom-input>
+        <div class="validators" *ngIf="form.controls.name.errors && form.controls.name.touched">
+          <div *ngIf="form.controls.name.errors?.['required']">El nombre es requerido</div>
+        </div>
+
+        <app-custom-input 
+          name="Correo" 
+          autocomplete="email" 
+          [control]="form.controls.email" 
+          icon="mail-outline" 
+          type="email">
+        </app-custom-input>
+        <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.touched">
+          <div *ngIf="form.controls.email.errors?.['required']">El correo es requerido</div>
+          <div *ngIf="form.controls.email.errors?.['email']">El correo no es válido</div>
+        </div>
+
+        <app-custom-input 
+          name="Contraseña" 
+          icon="lock-closed-outline" 
+          [control]="form.controls.password" 
+          type="password">
+        </app-custom-input>
+        <div class="validators" *ngIf="form.controls.password.errors && form.controls.password.touched">
+          <div *ngIf="form.controls.password.errors?.['required']">La contraseña es requerida</div>
+          <div *ngIf="form.controls.password.errors?.['minlength']">Debe tener al menos 6 caracteres</div>
+        </div>
+
+        <app-custom-input 
+          name="Repetir Contraseña" 
+          icon="lock-closed-outline" 
+          [control]="form.controls.confirmPassword" 
+          type="password">
+        </app-custom-input>
+        <div class="validators" *ngIf="form.controls.confirmPassword.errors && form.controls.confirmPassword.touched">
+          <div *ngIf="form.controls.confirmPassword.errors?.['required']">Debes repetir la contraseña</div>
+          <div *ngIf="form.controls.confirmPassword.errors?.['mustMatch']">Las contraseñas no coinciden</div>
+        </div>
+
+        <ion-button 
+          expand="full" 
+          class="sign-up-button" 
+          mode="ios" 
+          type="submit" 
+          shape="round"
+          [disabled]="form.invalid">
+          Registrarse
+        </ion-button>
+
+        <ion-button 
+          class="sign-up-register" 
+          routerLink="/auth" 
+          expand="full" 
+          shape="round" 
+          fill="clear">
+          ¿Ya tienes cuenta? Iniciar sesión
+        </ion-button>
+
+      </form>
+    </ion-card-content>
+  </ion-card>
+</div>
+<app-loading [isLoading]="isLoading" message="Creando cuenta..."></app-loading>
