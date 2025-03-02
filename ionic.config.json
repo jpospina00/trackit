@@ -1,0 +1,8 @@
+{
+  "name": "trackit",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "84f175a1"
+}
