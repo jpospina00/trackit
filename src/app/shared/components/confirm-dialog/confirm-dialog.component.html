@@ -1,14 +1,16 @@
 <ion-content class="modal-container">
-  <ion-card class="modal-card">
-    <ion-card-header>
-      <ion-card-title>{{ title }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>{{ message }}</p>
-    </ion-card-content>
-    <ion-footer class="modal-footer">
-      <ion-button expand="full" color="danger" (click)="cancel()">Cancelar</ion-button>
-      <ion-button expand="full" color="primary" (click)="confirm()">Confirmar</ion-button>
-    </ion-footer>
-  </ion-card>
+  <div class="modal-overlay">
+    <ion-card class="modal-card">
+      <ion-card-header>
+        <ion-card-title>{{ title }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ message }}</p>
+      </ion-card-content>
+      <ion-footer class="modal-footer">
+        <ion-button expand="full" color="danger" (click)="cancel()">Cancelar</ion-button>
+        <ion-button expand="full" color="primary" (click)="confirm()">Confirmar</ion-button>
+      </ion-footer>
+    </ion-card>
+  </div>
 </ion-content>

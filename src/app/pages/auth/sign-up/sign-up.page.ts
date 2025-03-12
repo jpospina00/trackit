@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AlertController, ModalController } from '@ionic/angular';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -17,32 +17,47 @@ export class SignUpPage implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
     confirmPassword: new FormControl('', [Validators.required])
-  });
+  },  { validators: this.validatePasswordMatch } );
 
-  constructor(private modalCtrl: ModalController) { }
+  constructor(private alertCtrl: AlertController) { }
 
   ngOnInit() {
   }
 
+  validatePasswordMatch(form: AbstractControl): ValidationErrors | null {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+    
+    return password === confirmPassword ? null : { passwordMismatch: true };
+  }
+
   async openConfirmationModal() {
-    const modal = await this.modalCtrl.create({
-      component: ConfirmDialogComponent,
-      componentProps: {
-        title: 'Confirmar Registro',
-        message: '¿Estás seguro de que quieres registrarte con esta información?'
-      }
+    const alert = await this.alertCtrl.create({
+      header: 'Confirmación',
+      message: '¿Estás seguro de continuar?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Acción cancelada');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            console.log('Acción confirmada');
+            this.register(); // Aquí llamas la función que se ejecutará al confirmar
+          }
+        }
+      ]
     });
-
-    await modal.present();
-
-    const { data } = await modal.onDidDismiss();
-
-    if (data?.confirmed) {
-      this.register();
-    }
+  
+    await alert.present();
   }
 
   register() {
+    console.log('Registrando...');
     if (this.form.invalid) return;
 
     console.log(this.form.value);

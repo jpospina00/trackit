@@ -51,7 +51,7 @@
         </app-custom-input>
         <div class="validators" *ngIf="form.controls.confirmPassword.errors && form.controls.confirmPassword.touched">
           <div *ngIf="form.controls.confirmPassword.errors?.['required']">Debes repetir la contraseña</div>
-          <div *ngIf="form.controls.confirmPassword.errors?.['mustMatch']">Las contraseñas no coinciden</div>
+          <div *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.dirty && form.errors?.['passwordMismatch']">Las contraseñas no coinciden</div>
         </div>
 
         <ion-button 
@@ -60,7 +60,8 @@
           mode="ios" 
           type="submit" 
           shape="round"
-          [disabled]="form.invalid">
+          [disabled]="form.invalid"
+          >
           Registrarse
         </ion-button>
 
