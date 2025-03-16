@@ -8,15 +8,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertComponent } from './components/alert/alert.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { LoadingComponent } from './components/loading/loading.component';
+import { AddUpdateProductComponent } from './components/add-update-product/add-update-product.component';
 
 
 
 @NgModule({
   declarations: [HeaderComponent, CustomInputComponent, LogoComponent,
-    AlertComponent, ConfirmDialogComponent, LoadingComponent
+    AlertComponent, ConfirmDialogComponent, LoadingComponent, AddUpdateProductComponent
   ],
   exports: [HeaderComponent, CustomInputComponent, LogoComponent,
-    AlertComponent, ConfirmDialogComponent, LoadingComponent, ReactiveFormsModule
+    AlertComponent, ConfirmDialogComponent, LoadingComponent, ReactiveFormsModule, AddUpdateProductComponent
   ],
   imports: [
     CommonModule, IonicModule, ReactiveFormsModule, FormsModule

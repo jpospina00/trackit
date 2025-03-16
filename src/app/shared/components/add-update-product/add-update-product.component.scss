@@ -1,0 +1,131 @@
+/* Contenedor principal: centra el formulario y establece un fondo suave */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;  /* Permite que el contenido se centre incluso si hay más elementos */
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+
+/* Tarjeta del formulario: establece ancho máximo, bordes redondeados y sombra */
+.product-card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Espaciado interno en el contenido de la tarjeta */
+ion-card-content {
+  padding: 20px;
+}
+
+/* Mensajes de validación: color y tipografía para errores */
+.validators {
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* Espaciado entre elementos de formulario */
+ion-item {
+  margin-top: 10px;
+}
+
+/* Vista previa de la imagen: centrado y sombras suaves */
+.image-preview {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.image-preview img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón para guardar: ancho completo, estilo de fuente y bordes redondeados */
+.save-button {
+  width: 100%;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  height: 45px;
+  border-radius: 10px;
+}
+
+.validators {
+  color: #d32f2f; /* Rojo para resaltar los errores */
+  font-size: 14px;
+  margin-top: 4px;
+  padding-left: 8px;
+}
+
+.validators div {
+  margin-top: 2px;
+}
+
+.category-dropdown {
+  margin: 10px 0;
+  --background: #fff;
+  --border-radius: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  ion-label {
+    font-size: 15px;
+    color: #555;
+    font-weight: 500;
+    margin-left: 8px;
+  }
+
+  /* Ajustes dentro del ion-select */
+  .ion-select-custom {
+    --padding-start: 0;
+    --padding-end: 0;
+    margin-left: 10px;
+    font-size: 15px;
+    color: #333;
+
+    /* Cambia el color del placeholder */
+    --placeholder-color: #999;
+
+    /* Cambia el icono por defecto (chevron-down) si lo deseas */
+    /* --select-icon: url('assets/icons/custom-caret.svg'); */
+    /* --select-icon-size: 14px; */
+  }
+}
+
+.input-item.multiline {
+  align-items: flex-start; // Asegura que el contenido se alinee correctamente
+  flex-direction: column; // Organiza en columna para evitar problemas con el textarea
+
+  .textarea-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  ion-label {
+    width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px; // Espaciado entre el label y el textarea
+    color: var(--ion-color-primary);
+  }
+
+  .text-area-input {
+    width: 100%;
+    min-height: 100px;
+    max-height: 250px;
+    border-radius: 8px;
+    padding: 10px;
+    background: var(--ion-background-color);
+    border: 1px solid var(--ion-color-medium);
+    resize: vertical; // Permite redimensionar verticalmente
+  }
+}

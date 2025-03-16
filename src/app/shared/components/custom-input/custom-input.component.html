@@ -1,7 +1,16 @@
 <ion-item class="input-item">
   <ion-icon *ngIf="icon" [name]="icon" slot="start"></ion-icon>
+  <!-- Si es multilinea, usa ion-textarea -->
   <ion-label position="floating">{{name}}</ion-label>
-  <ion-input [type]="type" [autocomplete]="autocomplete" [formControl]="control"></ion-input>
+  <div *ngIf="multiline" class="textarea-container">
+     
+     <ion-textarea
+       class="text-area-input"
+       [autoGrow]="true"
+       [formControl]="control">
+     </ion-textarea>
+   </div>
+  <ion-input *ngIf="multiline == false" [type]="type" [autocomplete]="autocomplete" [formControl]="control"></ion-input>
   <ion-button *ngIf="isPassword"  (click)="showOrHidePassword()"slot="end" fill="clear" shape="round">
     <ion-icon slot="icon-only" color="black" [name]="hide ?  'eye-outline' : 'eye-off-outline'"></ion-icon>
   </ion-button>

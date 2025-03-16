@@ -1,0 +1,108 @@
+<app-header title="Agregar Producto" [isModal]="true"></app-header>
+
+<ion-content>
+  <div class="form-container">
+    <ion-card class="product-card">
+      <ion-card-content>
+        <form [formGroup]="form" (ngSubmit)="saveProduct()">
+          
+          <app-custom-input 
+            name="Nombre del Producto" 
+            icon="pricetag-outline" 
+            [control]="form.controls.name" 
+            type="text">
+          </app-custom-input>
+          <div class="validators" *ngIf="form.controls.name.errors && form.controls.name.touched">
+            <div *ngIf="form.controls.name.errors?.['required']">
+              El nombre es requerido
+            </div>
+            <div *ngIf="form.controls.name.errors?.['minlength']">
+              Mínimo 3 caracteres
+            </div>
+          </div>
+
+          <app-custom-input 
+          name="Descripción del Producto" 
+          icon="document-text-outline" 
+          [control]="form.controls.description" 
+          type="text"
+          [multiline]="true">
+          class="description-input">
+        </app-custom-input>
+        <div class="validators" *ngIf="form.controls.description.errors && form.controls.description.touched">
+          <div *ngIf="form.controls.description.errors?.['required']">
+            La descripción es requerida
+          </div>
+        </div>
+
+          <app-custom-input 
+            name="Precio" 
+            icon="cash-outline" 
+            [control]="form.controls.price" 
+            type="number">
+          </app-custom-input>
+          <div class="validators" *ngIf="form.controls.price.errors && form.controls.price.touched">
+            <div *ngIf="form.controls.price.errors?.['required']">
+              El precio es requerido
+            </div>
+            <div *ngIf="form.controls.price.errors?.['min']">
+              Debe ser mayor a 0
+            </div>
+          </div>
+
+          <app-custom-input 
+            name="Stock Disponible" 
+            icon="cube-outline" 
+            [control]="form.controls.stock" 
+            type="number">
+          </app-custom-input>
+          <div class="validators" 
+               *ngIf="form.controls.stock.errors && form.controls.stock.touched">
+            <div *ngIf="form.controls.stock.errors?.['required']">
+              El stock es requerido
+            </div>
+            <div *ngIf="form.controls.stock.errors?.['min']">
+              Debe ser al menos 1
+            </div>
+          </div>
+
+          <ion-item class="category-dropdown">
+            <ion-label>Categoría</ion-label>
+            <ion-select 
+              formControlName="category" 
+              placeholder="Selecciona una categoría" 
+              interface="popover" 
+              class="ion-select-custom">
+              <ion-select-option *ngFor="let cat of categories" [value]="cat">
+                {{ cat }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div class="validators" *ngIf="form.controls.category.errors && form.controls.category.touched">
+            <div *ngIf="form.controls.category.errors?.['required']">
+              Selecciona una categoría
+            </div>
+          </div>
+
+          <ion-button (click)="fileInput.click()">
+            <ion-icon name="cloud-upload-outline"></ion-icon>
+            Subir imagen
+          </ion-button>
+          <input #fileInput type="file" (change)="onImageChange($event)" accept="image/*" hidden>
+
+          <div *ngIf="selectedImage" class="image-preview">
+            <img [src]="selectedImage" alt="Vista previa">
+          </div>
+
+          
+
+          <ion-button expand="full" class="save-button" type="submit" shape="round" [disabled]="form.invalid"> >
+            Guardar Producto
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
+
+<app-loading [isLoading]="isLoading" message="Guardando producto..."></app-loading>

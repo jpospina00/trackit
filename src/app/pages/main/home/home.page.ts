@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { UtilsService } from 'src/app/services/utils.services';
+import { AddUpdateProductComponent } from 'src/app/shared/components/add-update-product/add-update-product.component';
 
 @Component({
   selector: 'app-home',
@@ -8,9 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePage implements OnInit {
 
-  constructor() { }
+  utilsSvc = inject(UtilsService);
 
   ngOnInit() {
+  }
+
+  logout() {
+    this.utilsSvc.logout();
+  }
+
+  // ========= Agregar o actualizar un producto =========
+  addUpdateProduct() {
+    this.utilsSvc.presentModal({
+      component: AddUpdateProductComponent,
+      cssClass: 'add-update-modal',
+    });
   }
 
 }

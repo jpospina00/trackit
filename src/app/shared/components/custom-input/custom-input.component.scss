@@ -10,3 +10,20 @@ ion-item {
     margin-bottom: 8px; // Reduce espacio entre inputs
     width: 100%;
   }
+  .text-area-input {
+    /* Si el componente usa un <textarea> o un input, forzamos un alto mayor */
+    textarea,
+    input {
+      min-height: 220px;     /* Aumenta la altura para una descripción más extensa */
+      font-size: 16px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    
+    /* Si el componente renderiza el ícono con una clase interna, ajusta su tamaño */
+    .icon {
+      font-size: 20px;
+      color: #555;
+    }
+  }

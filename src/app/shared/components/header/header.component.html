@@ -1,13 +1,16 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons  slot="start">
+      <!--========== Back Button =========-->
+      <ion-back-button *ngIf="backButton" [defaultHref]></ion-back-button>
+      <!--========== Dismiss Modal =========-->
+      <ion-button (click)="dismissModal()" *ngIf="isModal">
+        <ion-icon  name="close-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons> 
     <ion-title>
       <strong>{{ title }}</strong>
       <span class="app-name">TrackIt</span>
     </ion-title>
-    <!-- <ion-buttons slot="end">
-      <ion-button (click)="openSettings()">
-        <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons> -->
   </ion-toolbar>
 </ion-header>

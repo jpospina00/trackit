@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, input, Input, OnInit } from '@angular/core';
+import { UtilsService } from 'src/app/services/utils.services';
 
 @Component({
   selector: 'app-header',
@@ -9,6 +10,10 @@ import { Component, Input, OnInit } from '@angular/core';
 export class HeaderComponent  implements OnInit {
 
   @Input() title!: string;
+  @Input() isModal!: boolean;
+  @Input() backButton!: boolean;
+
+  utilsSvc = inject(UtilsService);
 
   constructor() { }
 
@@ -19,5 +24,9 @@ export class HeaderComponent  implements OnInit {
     // Aquí podrías redirigir a una página de configuración
   }
   
-
+  dismissModal() {
+    console.log('Cerrar modal');
+    this.utilsSvc.dismissModal();
+    // Aquí podrías cerrar el modal
+  }
 }
