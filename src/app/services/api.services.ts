@@ -16,5 +16,8 @@ export class ApiService {
 
     forgotPassword(email: string) {
     }
+
+    getProducts() {
+    }
     
 }

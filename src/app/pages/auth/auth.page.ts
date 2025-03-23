@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { User } from 'src/app/models/user.model';
 import { UtilsService } from 'src/app/services/utils.services';
 
 @Component({
@@ -34,7 +35,13 @@ export class AuthPage implements OnInit {
           position: 'middle', 
           icon: 'alert-circle-outline'}); // Muestra un mensaje de éxito
         console.log('Inicio de sesión exitoso'); // Aquí va la lógica real de autenticación
-          this.utilsSvc.saveLocalStorage('user', this.form.value); // Guarda el usuario en el localStorage
+          const user:User = {
+            email: this.form.value.email || '',
+            name: 'Usuario de prueba',
+            role: 'admin',
+            id: '1'
+          }
+          this.utilsSvc.saveLocalStorage('user', user); // Guarda el usuario en el localStorage
           this.utilsSvc.routerLink('/main/home'); // Navega a la pantalla principal  
           this.form.reset(); // Limpia el formulario
       }, 2000);

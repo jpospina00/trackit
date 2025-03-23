@@ -69,4 +69,16 @@ export class UtilsService {
     dismissModal(data?: any) {
         return this.modalCtrl.dismiss(data);
     }
+
+    // ========= upload image =========
+    uploadImage(event: any) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const image = reader.result;
+            console.log('Imagen subida:', image);
+        };
+    }
 }
