@@ -5,6 +5,7 @@ import { User } from 'src/app/models/user.model';
 import { CartService } from 'src/app/services/cart.service';
 import { UtilsService } from 'src/app/services/utils.services';
 import { AddUpdateProductComponent } from 'src/app/shared/components/add-update-product/add-update-product.component';
+import { ShoppinCartsComponent } from 'src/app/shared/components/shoppin-carts/shoppin-carts.component';
 
 @Component({
   selector: 'app-home',
@@ -173,7 +174,8 @@ export class HomePage implements OnInit {
       }
     ] as Product[];
     this.filteredProducts = this.products;
-    this.categories = this.products.map(p => p.category);
+    this.categories = [...new Set(this.products.map(p => p.category))];
+
   };
 
 
@@ -185,6 +187,13 @@ export class HomePage implements OnInit {
     });
   }
 
+  // ========= Ver carrito de compras =========
+  viewCart() {
+    this.utilsSvc.presentModal({
+      component: ShoppinCartsComponent,
+      cssClass: 'cart-modal',
+    });
+  }
 
 
 }

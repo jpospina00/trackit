@@ -1,5 +1,8 @@
 import { Component, inject, input, Input, OnInit } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.services';
+import { ShoppinCartsComponent } from '../shoppin-carts/shoppin-carts.component';
+import { CartService } from 'src/app/services/cart.service';
+import { PurchasedProduct } from 'src/app/models/purchased-product';
 
 @Component({
   selector: 'app-header',
@@ -12,12 +15,22 @@ export class HeaderComponent  implements OnInit {
   @Input() title!: string;
   @Input() isModal!: boolean;
   @Input() backButton!: boolean;
+  @Input() shoppingCart!: boolean;
+  @Input() notifications!: boolean;
 
   utilsSvc = inject(UtilsService);
-
+  cardSvc = inject(CartService);
+  cart: PurchasedProduct[] = [];
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if(this.shoppingCart) {
+    this.cardSvc.cart$.subscribe((items) => {
+      console.log('Carrito:', items);
+      this.cart = items; // Se actualiza el carrito con los productos agregados
+    });
+  }
+  }
 
   openSettings() {
     console.log('Abrir ajustes');
@@ -28,5 +41,19 @@ export class HeaderComponent  implements OnInit {
     console.log('Cerrar modal');
     this.utilsSvc.dismissModal();
     // Aquí podrías cerrar el modal
+  }
+
+  openCart() {
+    console.log('Abrir carrito de compras');
+    this.utilsSvc.presentModal({
+          component: ShoppinCartsComponent,
+          cssClass: 'cart-modal',
+        });
+    // Aquí podrías redirigir a la página del carrito
+  }
+  
+  openNotifications() {
+    console.log('Abrir notificaciones');
+    // Aquí podrías redirigir a la página de notificaciones o mostrar un modal
   }
 }

@@ -1,16 +1,30 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons  slot="start">
+    <ion-buttons slot="start">
       <!--========== Back Button =========-->
       <ion-back-button *ngIf="backButton" [defaultHref]></ion-back-button>
       <!--========== Dismiss Modal =========-->
       <ion-button (click)="dismissModal()" *ngIf="isModal">
-        <ion-icon  name="close-circle-outline"></ion-icon>
+        <ion-icon name="close-circle-outline"></ion-icon>
       </ion-button>
-    </ion-buttons> 
+    </ion-buttons>
+    
     <ion-title>
       <strong>{{ title }}</strong>
       <span class="app-name">TrackIt</span>
     </ion-title>
+
+    <ion-buttons slot="end">
+      <!--========== Notifications =========-->
+      <ion-button *ngIf="notifications" (click)="openNotifications()">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+      
+      <!--========== Shopping Cart =========-->
+      <ion-button *ngIf="shoppingCart" (click)="openCart()" class="cart-button">
+        <ion-icon name="cart-outline"></ion-icon>
+        <ion-badge *ngIf="cart.length > 0" class="cart-badge">{{ cart.length }}</ion-badge>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>

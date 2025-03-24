@@ -9,18 +9,20 @@ import { AlertComponent } from './components/alert/alert.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { AddUpdateProductComponent } from './components/add-update-product/add-update-product.component';
+import { ShoppinCartsComponent } from './components/shoppin-carts/shoppin-carts.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
 @NgModule({
   declarations: [HeaderComponent, CustomInputComponent, LogoComponent,
-    AlertComponent, ConfirmDialogComponent, LoadingComponent, AddUpdateProductComponent
+    AlertComponent, ConfirmDialogComponent, LoadingComponent, AddUpdateProductComponent, ShoppinCartsComponent
   ],
   exports: [HeaderComponent, CustomInputComponent, LogoComponent,
-    AlertComponent, ConfirmDialogComponent, LoadingComponent, ReactiveFormsModule, AddUpdateProductComponent
+    AlertComponent, ConfirmDialogComponent, LoadingComponent, ReactiveFormsModule, AddUpdateProductComponent, ShoppinCartsComponent
   ],
   imports: [
-    CommonModule, IonicModule, ReactiveFormsModule, FormsModule
+    CommonModule, IonicModule, ReactiveFormsModule, FormsModule, NgxPaginationModule
   ]
 })
 export class SharedModule { }

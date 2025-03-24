@@ -1,0 +1,55 @@
+<app-header title="Mi Carrito" [isModal]="true"></app-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>
+      <h2>Total:</h2>
+    </ion-label>
+    <ion-note slot="end">
+      <strong>{{ total | currency:'USD':'symbol':'1.2-2' }}</strong>
+    </ion-note>
+  </ion-item>
+  <div class="no-products" *ngIf="cart.length === 0">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>No hay productos disponibles.</p>
+  </div>
+  <ion-list>
+    <ion-item-sliding class="product-item"  *ngFor="let p of cart; let i = index">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img [src]="p.urlImage" />
+        </ion-avatar>
+        <ion-label> 
+          <div class="name">{{ p.name }}</div>
+          <div class="data">
+            <strong>Precio: </strong> {{ p.price | currency:'USD':'symbol':'1.2-2' }} <br>
+            <strong>Stock: </strong> {{ p.stock }} <br>
+          </div>
+        </ion-label>
+  
+        <!-- Contenedor de cantidad + botón para usuarios que no son admin -->
+        <div class="quantity-container">
+          <ion-input [(ngModel)]="p.quantity" type="number" min="1" [max]="p.stock" placeholder="1" class="quantity-input" >
+          </ion-input>
+          
+        </div>
+      </ion-item>
+  
+      <!-- Opciones para admin -->
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="removeFromCart(i)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <ion-button expand="full" class="clear-cart-button" type="submit" shape="round"  
+  (click)="clearCart()" [disabled]="cart.length === 0">
+  Eliminar carrito
+</ion-button>
+
+<ion-button expand="full" class="buy-button" type="submit" shape="round"  
+  (click)="proceedToCheckout()" [disabled]="cart.length === 0">
+  Ir a Comprar
+</ion-button>
+</ion-content>

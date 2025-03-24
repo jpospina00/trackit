@@ -1,0 +1,26 @@
+<app-header [notifications]="true" title="Checkout"></app-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating">Dirección de Envío</ion-label>
+      <ion-input [(ngModel)]="shippingAddress"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Seleccionar Método de Pago</ion-label>
+      <ion-select [(ngModel)]="paymentMethod">
+        <ion-select-option value="credit-card">Tarjeta de Crédito</ion-select-option>
+        <ion-select-option value="paypal">PayPal</ion-select-option>
+        <ion-select-option value="cash">Pago en Efectivo</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Total a pagar</ion-label>
+      <ion-text>{{ total | currency }}</ion-text>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="full" (click)="confirmPurchase()">Confirmar Compra</ion-button>
+</ion-content>
