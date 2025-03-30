@@ -16,6 +16,7 @@ export class CustomInputComponent  implements OnInit {
   @Input() control!: FormControl;
   @Input() autocomplete!: string;
   @Input() multiline: boolean = false;
+  @Input() onlyRead: boolean = false;
   
   isPassword!: boolean;
   hide: boolean = true;

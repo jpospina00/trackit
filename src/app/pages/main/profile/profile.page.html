@@ -1,1 +1,38 @@
-<app-header title="Mi perfil" [isModal]="true"></app-header>
+<app-header title="Mi perfil" [showMenu]="true"></app-header>
+
+<ion-content>
+  <ion-icon name="person-circle-outline" class="avatar-icon"></ion-icon>
+  <div class="form-container">
+    <ion-card class="product-card">
+      <ion-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <app-custom-input 
+            name="Nombre del Usuario" 
+            icon="person-outline" 
+            [control]="form.controls.name" 
+            type="text">
+          </app-custom-input>
+
+          <app-custom-input 
+            name="Email" 
+            icon="mail-outline" 
+            [control]="form.controls.email" 
+            type="text">
+          </app-custom-input>
+
+          <app-custom-input 
+            name="Role" 
+            icon="shield-checkmark-outline" 
+            [control]="form.controls.role" 
+            [onlyRead]="true"
+            type="text">
+          </app-custom-input>          
+
+          <ion-button expand="full" class="save-button" type="submit" shape="round" [disabled]="form.invalid"> 
+            Editar usuario
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

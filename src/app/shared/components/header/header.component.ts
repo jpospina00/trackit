@@ -17,6 +17,7 @@ export class HeaderComponent  implements OnInit {
   @Input() backButton!: boolean;
   @Input() shoppingCart!: boolean;
   @Input() notifications!: boolean;
+  @Input() showMenu!: boolean;
 
   utilsSvc = inject(UtilsService);
   cardSvc = inject(CartService);

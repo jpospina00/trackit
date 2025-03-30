@@ -1,6 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
+      <ion-menu-button *ngIf="showMenu" menu="menu-content"></ion-menu-button>
       <!--========== Back Button =========-->
       <ion-back-button *ngIf="backButton" [defaultHref]></ion-back-button>
       <!--========== Dismiss Modal =========-->
@@ -8,7 +9,11 @@
         <ion-icon name="close-circle-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    
+
+      
+        
+      
+
     <ion-title>
       <strong>{{ title }}</strong>
       <span class="app-name">TrackIt</span>
