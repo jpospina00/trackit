@@ -56,7 +56,7 @@
   
       <!-- Opciones para admin -->
       <ion-item-options *ngIf="user().role === 'admin'" side="end">
-        <ion-item-option (click)="editProduct(p)">
+        <ion-item-option (click)="addUpdateProduct(p)">
           <ion-icon name="create-outline"></ion-icon>
         </ion-item-option>
         <ion-item-option color="danger" (click)="deleteProduct(p)">

@@ -1,0 +1,52 @@
+ion-menu {
+    --width: 270px;
+    outline: none;
+    // background: rgba(15, 15, 15, 0.85); // Fondo oscuro con transparencia
+    backdrop-filter: blur(15px); // Efecto vidrio
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);
+  
+    ion-toolbar {
+      --background: transparent;
+      --color: white;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+  
+    ion-title {
+      text-transform: uppercase;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ion-color-primary); // Color dorado premium
+    }
+  
+    ion-content {
+      --background: transparent;
+      display: flex;
+      flex-direction: column;
+      padding-top: 1rem;
+    }
+  
+    
+ion-item {
+        font-size: 14px;
+
+      ion-icon {
+        margin-right: 12px;
+        font-size: 1.5rem;
+        color: var(--ion-color-primary); // Azul neón
+        transition: transform 0.3s ease-in-out;
+      }
+    
+      &.active {
+        ion-icon {
+          color: #ff5733; // Cambia el color del icono
+        }
+        color:#ff5733; // Cambia el color del texto
+      }
+  
+    }
+  }
+  

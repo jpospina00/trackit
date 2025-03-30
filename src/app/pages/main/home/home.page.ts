@@ -58,9 +58,6 @@ export class HomePage implements OnInit {
     this.cardSvc.addToCart(purchasedProduct);
     console.log('Añadir al carrito:', purchasedProduct);
 }
-  editProduct(product: Product) {
-    console.log('Editar producto:', product);
-  }
   deleteProduct(product: Product) {
     console.log('Eliminar producto:', product);
   }
@@ -180,10 +177,13 @@ export class HomePage implements OnInit {
 
 
   // ========= Agregar o actualizar un producto =========
-  addUpdateProduct() {
+  addUpdateProduct(Product?: Product) {
     this.utilsSvc.presentModal({
       component: AddUpdateProductComponent,
       cssClass: 'add-update-modal',
+      componentProps: {
+        product: Product,
+      },
     });
   }
 

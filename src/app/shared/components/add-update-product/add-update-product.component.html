@@ -1,10 +1,10 @@
-<app-header title="Agregar Producto" [isModal]="true"></app-header>
+<app-header [title]="product ? 'Editar Producto' : 'Agregar Producto'" [isModal]="true"></app-header>
 
 <ion-content>
   <div class="form-container">
     <ion-card class="product-card">
       <ion-card-content>
-        <form [formGroup]="form" (ngSubmit)="saveProduct()">
+        <form [formGroup]="form" (ngSubmit)="submit()">
           
           <app-custom-input 
             name="Nombre del Producto" 
@@ -96,8 +96,8 @@
 
           
 
-          <ion-button expand="full" class="save-button" type="submit" shape="round" [disabled]="form.invalid"> >
-            Guardar Producto
+          <ion-button expand="full" class="save-button" type="submit" shape="round" [disabled]="form.invalid"> 
+            {{product ? 'Editar Producto' : 'Agregar Producto'}}
           </ion-button>
         </form>
       </ion-card-content>
