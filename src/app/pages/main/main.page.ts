@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from 'src/app/models/user.model';
 import { UtilsService } from 'src/app/services/utils.services';
 
 @Component({
@@ -16,7 +17,7 @@ export class MainPage implements OnInit {
   pages = [
     { title: 'Home', url: '/main/home', icon: 'home' },
     { title: 'Profile', url: '/main/profile', icon: 'person' },
-    { title: 'Checkout', url: '/main/checkout', icon: 'cart' },
+    { title: 'Orders', url: '/main/orders', icon: 'list' },
   ]
   utilsSvc = inject(UtilsService);
   router = inject(Router);
@@ -32,6 +33,11 @@ export class MainPage implements OnInit {
     }
   );
   }
+
+  user(): User {
+      return this.utilsSvc.getLocalStorage('user');
+    }
+    
 
   logout() {
     this.utilsSvc.logout();

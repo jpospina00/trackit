@@ -11,15 +11,16 @@ import { LoadingComponent } from './components/loading/loading.component';
 import { AddUpdateProductComponent } from './components/add-update-product/add-update-product.component';
 import { ShoppinCartsComponent } from './components/shoppin-carts/shoppin-carts.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ViewOrderProductsComponent } from './components/view-order-products/view-order-products.component';
 
 
 
 @NgModule({
   declarations: [HeaderComponent, CustomInputComponent, LogoComponent,
-    AlertComponent, ConfirmDialogComponent, LoadingComponent, AddUpdateProductComponent, ShoppinCartsComponent
+    AlertComponent, ConfirmDialogComponent, LoadingComponent, AddUpdateProductComponent, ShoppinCartsComponent, ViewOrderProductsComponent
   ],
   exports: [HeaderComponent, CustomInputComponent, LogoComponent,
-    AlertComponent, ConfirmDialogComponent, LoadingComponent, ReactiveFormsModule, AddUpdateProductComponent, ShoppinCartsComponent
+    AlertComponent, ConfirmDialogComponent, LoadingComponent, ReactiveFormsModule, AddUpdateProductComponent, ShoppinCartsComponent, ViewOrderProductsComponent
   ],
   imports: [
     CommonModule, IonicModule, ReactiveFormsModule, FormsModule, NgxPaginationModule

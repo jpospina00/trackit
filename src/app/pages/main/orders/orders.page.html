@@ -1,0 +1,16 @@
+<app-header title="Mis Pedidos"></app-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let order of orders" (click)="viewProduct(order.id)">
+      <ion-label>
+        <h2>Pedido #{{ order.id }}</h2>
+        <p>Estado: {{ order.status }}</p>
+        <p>Transportista: {{ order.carrier }}</p>
+        <p>Método de pago: {{ order.paymentMethod }}</p>
+        <p>Total: {{ order.total | currency:'COP' }}</p>
+      </ion-label>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </ion-item>
+  </ion-list>
+</ion-content>

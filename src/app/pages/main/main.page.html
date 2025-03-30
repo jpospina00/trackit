@@ -1,6 +1,8 @@
 <ion-menu contentId="menu-content" menuId="menu-content" side="start">
   <app-header  title="Menu"></app-header>
-  <ion-content>
+  <ion-content class="ion-text-center">
+    <ion-icon name="person-circle-outline" class="avatar-icon"></ion-icon>
+    <h4>{{user()?.name}}</h4>
     <ion-menu-toggle autoHide="false" *ngFor="let p of pages">
       <ion-item [ngClass]="{'active': currentPath == p.url}" [routerLink]="p.url" routerDirection="root" detail lines="none" class="menu-item">
         <ion-icon [name]="p.icon"></ion-icon>

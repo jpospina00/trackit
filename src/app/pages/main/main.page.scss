@@ -26,6 +26,7 @@ ion-menu {
       --background: transparent;
       display: flex;
       flex-direction: column;
+      align-items: center; 
       padding-top: 1rem;
     }
   
@@ -50,3 +51,16 @@ ion-item {
     }
   }
   
+
+  h4 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--ion-color-primary); // Color dorado premium
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .avatar-icon {
+    color: var(--ion-color-primary); // Color dorado premium
+    font-size: 100px;
+  }
