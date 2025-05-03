@@ -15,9 +15,12 @@ export class SignUpPage implements OnInit {
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
+    role: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
     confirmPassword: new FormControl('', [Validators.required])
   },  { validators: this.validatePasswordMatch } );
+
+  roles: string[] = ['cliente', 'repartidor'];
 
   constructor(private alertCtrl: AlertController) { }
 

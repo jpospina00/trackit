@@ -32,6 +32,24 @@
           <div *ngIf="form.controls.email.errors?.['email']">El correo no es válido</div>
         </div>
 
+        <ion-item class="role-dropdown">
+          <ion-label>Rol</ion-label>
+          <ion-select 
+            formControlName="role" 
+            placeholder="Selecciona un rol" 
+            interface="popover" 
+            class="ion-select-custom">
+            <ion-select-option *ngFor="let role of roles" [value]="role">
+              {{ role }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div class="validators" *ngIf="form.controls.role.errors && form.controls.role.touched">
+          <div *ngIf="form.controls.role.errors?.['required']">
+            Selecciona un rol
+          </div>
+        </div>
+
         <app-custom-input 
           name="Contraseña" 
           icon="lock-closed-outline" 

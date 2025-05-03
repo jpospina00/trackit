@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
+import { ApiService } from 'src/app/services/api.services';
 import { UtilsService } from 'src/app/services/utils.services';
 
 @Component({
@@ -14,7 +15,8 @@ export class AuthPage implements OnInit {
 
   isLoading: boolean = false;
   utilsSvc = inject(UtilsService);
-
+  apiSvc = inject(ApiService);
+  
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required])
@@ -26,8 +28,8 @@ export class AuthPage implements OnInit {
     await loading.present();
     try {
       // throw new Error('Error de autenticación'); // Simula un error de autenticación
-      setTimeout(() => {
-  
+      const userSrv = await this.apiSvc.signIn(this.form.value.email!, this.form.value.password!);
+      console.log(userSrv); // Aquí va la lógica real de autenticación
         this.utilsSvc.presentToast({
           message: 'Inicio de sesión exitoso', 
           duration: 2000, 
@@ -44,7 +46,7 @@ export class AuthPage implements OnInit {
           this.utilsSvc.saveLocalStorage('user', user); // Guarda el usuario en el localStorage
           this.utilsSvc.routerLink('/main/home'); // Navega a la pantalla principal  
           this.form.reset(); // Limpia el formulario
-      }, 2000);
+  
     } catch (error) {
       this.utilsSvc.presentToast({message: 'Error al iniciar sesión', duration: 2000, color: 'danger', position: 'middle', 
         icon: 'alert-circle-outline'}); // Muestra un mensaje de error

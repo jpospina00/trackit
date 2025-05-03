@@ -59,3 +59,34 @@
     }
   }
   
+
+  .role-dropdown {
+    margin: 10px 0;
+    --background: #fff;
+    --border-radius: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  
+    ion-label {
+      font-size: 15px;
+      color: #555;
+      font-weight: 500;
+      margin-left: 8px;
+    }
+  
+    /* Ajustes dentro del ion-select */
+    .ion-select-custom {
+      --padding-start: 0;
+      --padding-end: 0;
+      margin-left: 10px;
+      font-size: 15px;
+      color: #333;
+  
+      /* Cambia el color del placeholder */
+      --placeholder-color: #999;
+  
+      /* Cambia el icono por defecto (chevron-down) si lo deseas */
+      /* --select-icon: url('assets/icons/custom-caret.svg'); */
+      /* --select-icon-size: 14px; */
+    }
+  }
