@@ -26,35 +26,31 @@ export class AuthPage implements OnInit {
     console.log(this.form.value);
     const loading = await this.utilsSvc.loading();
     await loading.present();
-    try {
       // throw new Error('Error de autenticación'); // Simula un error de autenticación
-      const userSrv = await this.apiSvc.signIn(this.form.value.email!, this.form.value.password!);
-      console.log(userSrv); // Aquí va la lógica real de autenticación
+      this.apiSvc.signIn(this.form.value.email!, this.form.value.password!)
+    .subscribe({
+      next: (response) => {
+        // Manejar respuesta exitosa
+        console.log("Respuesta del servidor:", response);
+        this.utilsSvc.saveLocalStorage('user', response.user);
+        this.utilsSvc.saveLocalStorage('token', response.token);
+        this.utilsSvc.routerLink('/main/home');
+        loading.dismiss();
+        this.form.reset();
+      },
+      error: (err) => {
+        console.error("Error en la petición:", err);
         this.utilsSvc.presentToast({
-          message: 'Inicio de sesión exitoso', 
-          duration: 2000, 
-          color: 'success', 
-          position: 'middle', 
-          icon: 'alert-circle-outline'}); // Muestra un mensaje de éxito
-        console.log('Inicio de sesión exitoso'); // Aquí va la lógica real de autenticación
-          const user:User = {
-            email: this.form.value.email || '',
-            name: 'Usuario de prueba',
-            role: 'admin',
-            id: '1'
-          }
-          this.utilsSvc.saveLocalStorage('user', user); // Guarda el usuario en el localStorage
-          this.utilsSvc.routerLink('/main/home'); // Navega a la pantalla principal  
-          this.form.reset(); // Limpia el formulario
+          message: err.error?.message || 'Error al iniciar sesión',
+          color: 'danger',
+          duration: 2000,
+        });
+        loading.dismiss();
+        this.form.reset();
+      },
+    });
   
-    } catch (error) {
-      this.utilsSvc.presentToast({message: 'Error al iniciar sesión', duration: 2000, color: 'danger', position: 'middle', 
-        icon: 'alert-circle-outline'}); // Muestra un mensaje de error
-      console.error('Error al iniciar sesión', error);
-    }
-    finally {
-      loading.dismiss();
-    }
+
   }
   forgotPassword() {
     console.log('Olvidé mi contraseña');

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { User } from "../models/user.model";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
@@ -10,7 +10,7 @@ import { Observable } from "rxjs";
 export class ApiService {
     api:String = 'http://localhost:3000';
 
-    constructor(private http: HttpClient) {}
+    http = inject(HttpClient);
 
     signIn(email: string, password: string): Observable<any>  {
         return this.http.post(`${this.api}/auth/login`, { email, password });
