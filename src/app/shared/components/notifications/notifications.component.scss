@@ -1,0 +1,70 @@
+.notifications-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 20px;
+}
+
+.notification-card {
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  border-left: 4px solid #3880ff; // Azul por defecto para no leída
+
+  &:hover {
+    transform: scale(1.01);
+  }
+
+  &.read {
+    opacity: 0.6;
+    border-left-color: #ccc; // Color gris para leídas
+  }
+
+  ion-card-header {
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ccc;
+  }
+
+  ion-card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .read-icon {
+      font-size: 1.2rem;
+      color: #4caf50; // verde para indicar que está leída
+    }
+  }
+
+  ion-card-content {
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .timestamp {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 4px;
+    }
+  }
+}
+
+.no-notifications {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+  color: #777;
+  text-align: center;
+
+  ion-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+}

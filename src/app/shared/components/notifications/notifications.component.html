@@ -1,0 +1,28 @@
+<app-header title="Notificaciones" [isModal]="true"></app-header>
+
+<ion-content class="ion-padding">
+  <div class="notifications-container">
+
+    <div *ngIf="notifications.length === 0" class="no-notifications">
+      <ion-icon name="notifications-off-outline"></ion-icon>
+      <p>No tienes notificaciones por ahora.</p>
+    </div>
+
+    <ion-card *ngFor="let notification of notifications"
+              class="notification-card"
+              [class.read]="notification.read"
+              (click)="viewNotification(notification)">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="checkmark-done-circle" *ngIf="notification.read" class="read-icon"></ion-icon>
+          {{ notification.title || 'Notificación' }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ notification.message }}</p>
+        <span class="timestamp">{{ notification.createdAt | date:'short' }}</span>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>

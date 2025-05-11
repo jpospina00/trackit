@@ -12,15 +12,16 @@ import { AddUpdateProductComponent } from './components/add-update-product/add-u
 import { ShoppinCartsComponent } from './components/shoppin-carts/shoppin-carts.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ViewOrderProductsComponent } from './components/view-order-products/view-order-products.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
 
 
 
 @NgModule({
   declarations: [HeaderComponent, CustomInputComponent, LogoComponent,
-    AlertComponent, ConfirmDialogComponent, LoadingComponent, AddUpdateProductComponent, ShoppinCartsComponent, ViewOrderProductsComponent
+    AlertComponent, ConfirmDialogComponent, LoadingComponent, AddUpdateProductComponent, ShoppinCartsComponent, ViewOrderProductsComponent, NotificationsComponent
   ],
   exports: [HeaderComponent, CustomInputComponent, LogoComponent,
-    AlertComponent, ConfirmDialogComponent, LoadingComponent, ReactiveFormsModule, AddUpdateProductComponent, ShoppinCartsComponent, ViewOrderProductsComponent
+    AlertComponent, ConfirmDialogComponent, LoadingComponent, ReactiveFormsModule, AddUpdateProductComponent, ShoppinCartsComponent, ViewOrderProductsComponent, NotificationsComponent
   ],
   imports: [
     CommonModule, IonicModule, ReactiveFormsModule, FormsModule, NgxPaginationModule

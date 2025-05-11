@@ -29,9 +29,6 @@ export class ShoppinCartsComponent  implements OnInit {
     });
   }
 
-
-  
-
   removeFromCart(index: number) {
     this.cardSvc.removeFromCart(index);
     
@@ -39,7 +36,6 @@ export class ShoppinCartsComponent  implements OnInit {
 
   clearCart() {
     this.cardSvc.clearCart();
-    
   }
 
   proceedToCheckout() {

@@ -3,6 +3,7 @@ import { UtilsService } from 'src/app/services/utils.services';
 import { ShoppinCartsComponent } from '../shoppin-carts/shoppin-carts.component';
 import { CartService } from 'src/app/services/cart.service';
 import { PurchasedProduct } from 'src/app/models/purchased-product';
+import { NotificationsComponent } from '../notifications/notifications.component';
 
 @Component({
   selector: 'app-header',
@@ -55,6 +56,10 @@ export class HeaderComponent  implements OnInit {
   
   openNotifications() {
     console.log('Abrir notificaciones');
+    this.utilsSvc.presentModal({
+          component: NotificationsComponent,
+          cssClass: 'cart-modal',
+        });
     // Aquí podrías redirigir a la página de notificaciones o mostrar un modal
   }
 }
