@@ -2,6 +2,8 @@ import { inject, Injectable } from "@angular/core";
 import { User } from "../models/user.model";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
+import { Order } from "../models/orders.model";
+import { Product } from "../models/products.model";
 
 @Injectable({
     providedIn: 'root'
@@ -28,6 +30,18 @@ export class ApiService {
         return this.http.get(`${this.api}/products`);
     }
 
+    createProduct(product: Product): Observable<any> {
+        return this.http.post(`${this.api}/products`, product);
+    }
+
+    deleteProduct(id: string): Observable<any> {
+        return this.http.delete(`${this.api}/products/${id}`);
+    }
+
+    updateProduct(id: string, product: Product): Observable<any> {
+        return this.http.put(`${this.api}/products/${id}`, product);
+    }
+
     getNotifications(id: String): Observable<Notification[]> {
         return this.http.get<Notification[]>(`${this.api}/notifications/user/${id}`);
     }
@@ -37,6 +51,15 @@ export class ApiService {
     }
 
     getNotificationById(id: number): Observable<Notification> {
-    return this.http.get<Notification>(`${this.api}/notifications/${id}`);
-  }
+        return this.http.get<Notification>(`${this.api}/notifications/${id}`);
+    }
+
+    assignOrderToCarrier(orderId: string, carrierId: string): Observable<any> {
+        return this.http.patch(`${this.api}/orders/${orderId}/assign`, { carrierId });
+    }
+
+    getAvaliableOrders(): Observable<Order[]> {
+        return this.http.get<Order[]>(`${this.api}/orders/avaliable`);
+    }
+
 }

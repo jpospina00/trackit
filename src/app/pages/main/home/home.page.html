@@ -3,7 +3,7 @@
 <ion-content>
 
   <!-- Campo de búsqueda y botón de filtro -->
-  <div class="search-container">
+  <div class="search-container" *ngIf="user().role === 'admin' || user().role === 'cliente'">
     <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="filterProducts()" placeholder="Buscar productos..."></ion-searchbar>
     <ion-item class="category-dropdown">
       <ion-label>Categoría</ion-label>
@@ -23,13 +23,13 @@
   </div>
 
 
-    <div class="no-products" *ngIf="filteredProducts.length === 0">
+    <div class="no-products" *ngIf="filteredProducts.length === 0 && (user().role === 'admin' || user().role === 'cliente')">
       <ion-icon name="alert-circle-outline"></ion-icon>
       <p>No hay productos disponibles.</p>
     </div>
 
 
-  <ion-list>
+  <ion-list *ngIf="user().role === 'admin' || user().role === 'cliente'" >
     <ion-item-sliding class="product-item" *ngFor="let p of filteredProducts | paginate: { itemsPerPage: 5, currentPage: page }">
       <ion-item>
         <ion-avatar slot="start">
@@ -44,7 +44,7 @@
         </ion-label>
   
         <!-- Contenedor de cantidad + botón para usuarios que no son admin -->
-        <div class="quantity-container" *ngIf="user().role !== 'admin'">
+        <div class="quantity-container" *ngIf="user().role === 'cliente'">
           <ion-input [(ngModel)]="p.quantity" type="number" min="1" [max]="p.stock" placeholder="1" class="quantity-input">
           </ion-input>
           <ion-button fill="solid" color="primary" class="add-btn" 
@@ -53,6 +53,8 @@
           </ion-button>
         </div>
       </ion-item>
+
+
   
       <!-- Opciones para admin -->
       <ion-item-options *ngIf="user().role === 'admin'" side="end">
@@ -65,13 +67,56 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-  <pagination-controls (pageChange)="page = $event"></pagination-controls>
+  <pagination-controls (pageChange)="page = $event" *ngIf="user().role === 'admin' || user().role === 'cliente'"></pagination-controls>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button routerLink="/profile">
       <ion-icon name="person-circle-outline"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
       <ion-fab-button (click)="addUpdateProduct()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button routerLink="/settings">
+        <ion-icon name="settings-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <div *ngIf="user().role === 'domiciliario'">
+    <h2 class="section-title">Pedidos Disponibles</h2>
+    <div class="search-container">
+    <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="filterOrders()" placeholder="Buscar Pedidos..."></ion-searchbar>
+    
+  </div>
+    <ion-card *ngFor="let pedido of filteredOrders">
+      <ion-card-header>
+        <ion-card-title>Pedido #{{ pedido.id }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Dirección:</strong> {{ pedido.address }}</p>
+        <p><strong>Productos:</strong></p>
+        <ion-button expand="block" color="primary" (click)="assignOrderToCarrier(pedido)">
+          Aceptar Pedido
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="no-pedidos" *ngIf="filteredOrders.length === 0">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      <p>No hay pedidos disponibles en este momento.</p>
+    </div>
+  </div>
+
+  <!-- FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="/profile">
+      <ion-icon name="person-circle-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button *ngIf="user().role === 'admin'" (click)="addUpdateProduct()">
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
       <ion-fab-button routerLink="/settings">

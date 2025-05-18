@@ -19,8 +19,8 @@ export class OrdersPage implements OnInit {
   utilsSvc = inject(UtilsService);
 
   orders: Order[] = [
-    { id: '12345', status: 'En camino', carrier: 'DHL', paymentMethod: 'Tarjeta', total: 150000 },
-    { id: '67890', status: 'Entregado', carrier: 'FedEx', paymentMethod: 'Efectivo', total: 200000 }
+    { id: '12345', status: 'En camino', carrier: 'DHL', paymentMethod: 'Tarjeta', total: 150000, address: 'Calle Falsa 123' },
+    { id: '67890', status: 'Entregado', carrier: 'FedEx', paymentMethod: 'Efectivo', total: 200000, address: 'Avenida Siempre Viva 742' },
   ];
 
   ngOnInit() {

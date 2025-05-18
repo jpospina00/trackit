@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { Order } from 'src/app/models/orders.model';
 import { Product } from 'src/app/models/products.model';
 import { PurchasedProduct } from 'src/app/models/purchased-product';
 import { User } from 'src/app/models/user.model';
@@ -21,8 +22,13 @@ export class HomePage implements OnInit {
   apiSvc = inject(ApiService);
 
   products: Product[] = [];
+  avalaibleOrders : Order[] = [
+    // { id: '12345', status: 'En camino', carrier: 'DHL', paymentMethod: 'Tarjeta', total: 150000, address: 'Calle Falsa 123' },
+    // { id: '67890', status: 'Entregado', carrier: 'FedEx', paymentMethod: 'Efectivo', total: 200000, address: 'Avenida Siempre Viva 742' },
+  ];
   searchQuery: string = '';
   filteredProducts: any[] = [];
+  filteredOrders: any[] = [];
   categories: any = [];
   llevar: any = [];
   selectedCategory: string = ''; 
@@ -32,7 +38,12 @@ export class HomePage implements OnInit {
   ngOnInit() {
     console.log("user");
     console.log(this.user());
+    if(this.user().role === 'domiciliario') {
+      this.filteredOrders = this.avalaibleOrders;
+    }
+    else {
     this.filteredProducts = this.products;
+    }
   }
 
   filterProducts() {
@@ -40,6 +51,13 @@ export class HomePage implements OnInit {
       const matchesSearch = p.name.toLowerCase().includes(this.searchQuery.toLowerCase());
       const matchesCategory = this.selectedCategory === '' || p.category === this.selectedCategory;
       return matchesSearch && matchesCategory;
+    });
+  }
+
+  filterOrders() {
+    this.filteredOrders = this.avalaibleOrders.filter(p => {
+      const matchesSearch = p.id.toLowerCase().includes(this.searchQuery.toLowerCase()) || p.address.toLowerCase().includes(this.searchQuery.toLowerCase());
+      return matchesSearch;
     });
   }
   
@@ -61,6 +79,25 @@ export class HomePage implements OnInit {
     console.log('Añadir al carrito:', purchasedProduct);
 }
   deleteProduct(product: Product) {
+    this.apiSvc.deleteProduct(product.id!).subscribe({
+      next: (response) => {
+        console.log("Respuesta del servidor:", response);
+        this.utilsSvc.presentToast({
+          message: 'Producto eliminado correctamente',
+          color: 'success',
+          duration: 2000,
+        });
+        this.getProducts();
+      },
+      error: (err) => {
+        console.error("Error en la petición:", err);
+        this.utilsSvc.presentToast({
+          message: err.error?.message || 'Error al eliminar el producto',
+          color: 'danger',
+          duration: 2000,
+        });
+      },
+    });
     console.log('Eliminar producto:', product);
   }
 
@@ -69,7 +106,12 @@ export class HomePage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.getProducts();
+    if(this.user().role === 'domiciliario') {
+      this.getOrders();
+    }
+    else {
+      this.getProducts();
+    }
   }
 
   getProducts() {
@@ -89,109 +131,47 @@ export class HomePage implements OnInit {
         });
       },
     });
-    
-    // this.products = [
-    //   {
-    //     name: 'Producto 1',
-    //     price: 100,
-    //     description: 'Descripción del producto 1',
-    //     stock: 10,
-    //     category: 'Electrónica',
-    //     urlImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8N-942sY2xhOFYMle0IbLhUcjyBraDoqQig&s'
-    //   },
-    //   {
-    //     name: 'Producto 2',
-    //     price: 200,
-    //     description: 'Descripción del producto 2',
-    //     stock: 20,
-    //     category: 'Ropa',
-    //     urlImage: 'https://d1ih8jugeo2m5m.cloudfront.net/2024/08/ideas_para_tienda_de_ropa_infantil.jpg'
-    //   },
-    //   {
-    //     name: 'Producto 3',
-    //     price: 300,
-    //     description: 'Descripción del producto 3',
-    //     stock: 30,
-    //     category: 'Hogar',
-    //     urlImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs4nNmqqUQ_wZQz6hncRM8BixWc2WJJI4T1Q&s'
-    //   },
-    //   {
-    //     name: 'Producto 1',
-    //     price: 100,
-    //     description: 'Descripción del producto 1',
-    //     stock: 10,
-    //     category: 'Electrónica',
-    //     urlImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8N-942sY2xhOFYMle0IbLhUcjyBraDoqQig&s'
-    //   },
-    //   {
-    //     name: 'Producto 2',
-    //     price: 200,
-    //     description: 'Descripción del producto 2',
-    //     stock: 20,
-    //     category: 'Ropa',
-    //     urlImage: 'https://d1ih8jugeo2m5m.cloudfront.net/2024/08/ideas_para_tienda_de_ropa_infantil.jpg'
-    //   },
-    //   {
-    //     name: 'Producto 3',
-    //     price: 300,
-    //     description: 'Descripción del producto 3',
-    //     stock: 30,
-    //     category: 'Hogar',
-    //     urlImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs4nNmqqUQ_wZQz6hncRM8BixWc2WJJI4T1Q&s'
-    //   },
-    //   {
-    //     name: 'Producto 1',
-    //     price: 100,
-    //     description: 'Descripción del producto 1',
-    //     stock: 10,
-    //     category: 'Electrónica',
-    //     urlImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8N-942sY2xhOFYMle0IbLhUcjyBraDoqQig&s'
-    //   },
-    //   {
-    //     name: 'Producto 2',
-    //     price: 200,
-    //     description: 'Descripción del producto 2',
-    //     stock: 20,
-    //     category: 'Ropa',
-    //     urlImage: 'https://d1ih8jugeo2m5m.cloudfront.net/2024/08/ideas_para_tienda_de_ropa_infantil.jpg'
-    //   },
-    //   {
-    //     name: 'Producto 3',
-    //     price: 300,
-    //     description: 'Descripción del producto 3',
-    //     stock: 30,
-    //     category: 'Hogar',
-    //     urlImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs4nNmqqUQ_wZQz6hncRM8BixWc2WJJI4T1Q&s'
-    //   },
-    //   {
-    //     name: 'Producto 1',
-    //     price: 100,
-    //     description: 'Descripción del producto 1',
-    //     stock: 10,
-    //     category: 'Electrónica',
-    //     urlImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8N-942sY2xhOFYMle0IbLhUcjyBraDoqQig&s'
-    //   },
-    //   {
-    //     name: 'Producto 2',
-    //     price: 200,
-    //     description: 'Descripción del producto 2',
-    //     stock: 20,
-    //     category: 'Ropa',
-    //     urlImage: 'https://d1ih8jugeo2m5m.cloudfront.net/2024/08/ideas_para_tienda_de_ropa_infantil.jpg'
-    //   },
-    //   {
-    //     name: 'Producto 30',
-    //     price: 300,
-    //     description: 'Descripción del producto 3',
-    //     stock: 30,
-    //     category: 'Hogar',
-    //     urlImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs4nNmqqUQ_wZQz6hncRM8BixWc2WJJI4T1Q&s'
-    //   }
-    // ] as Product[];
-    // this.filteredProducts = this.products;
-    // this.categories = [...new Set(this.products.map(p => p.category))];
-
   };
+
+  getOrders() {
+    this.apiSvc.getAvaliableOrders().subscribe({
+      next: (response) => {
+        console.log("Respuesta del servidor:", response);
+        this.avalaibleOrders = response;
+        this.filteredOrders = this.avalaibleOrders;
+      },
+      error: (err) => {
+        console.error("Error en la petición:", err);
+        this.utilsSvc.presentToast({
+          message: err.error?.message || 'Error al obtener los pedidos',
+          color: 'danger',
+          duration: 2000,
+        });
+      },
+    });
+  };
+
+  assignOrderToCarrier(order: Order) {
+    this.apiSvc.assignOrderToCarrier(order.id, this.user().id!).subscribe({
+      next: (response) => {
+        console.log("Respuesta del servidor:", response);
+        this.utilsSvc.presentToast({
+          message: 'Pedido asignado correctamente',
+          color: 'success',
+          duration: 2000,
+        });
+         this.getOrders();
+      },
+      error: (err) => {
+        console.error("Error en la petición:", err);
+        this.utilsSvc.presentToast({
+          message: err.error?.message || 'Error al asignar el pedido',
+          color: 'danger',
+          duration: 2000,
+        });
+      },
+    });
+  }
 
 
   // ========= Agregar o actualizar un producto =========
