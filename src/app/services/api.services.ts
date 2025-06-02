@@ -62,4 +62,28 @@ export class ApiService {
         return this.http.get<Order[]>(`${this.api}/orders/avaliable`);
     }
 
+    getOrdersByUser(userId: string): Observable<Order[]> {
+        return this.http.get<Order[]>(`${this.api}/orders/user/${userId}`);
+    }
+
+    getOrdersByCarrier(userId: string, status: string): Observable<Order[]> {
+        return this.http.post<Order[]>(`${this.api}/orders/carrier/${userId}`, { status });
+    }
+
+    getOrderById(orderId: string): Observable<Order[]> {
+        return this.http.get<Order[]>(`${this.api}/orders/${orderId}`);
+    }
+
+    advanceOrderStatus(orderId: string, status: string): Observable<any> {
+        return this.http.patch(`${this.api}/orders/${orderId}/status`, { status });
+    }
+
+    signInWithGoogle(idToken: string): Observable<any> {
+    return this.http.post(`${this.api}/auth/google-login`, { idToken });
+}
+
+    createCheckoutSession(items: any[]): Observable<any> {
+        return this.http.post(`${this.api}/checkout/create-checkout-session`, { items });
+    }
+
 }

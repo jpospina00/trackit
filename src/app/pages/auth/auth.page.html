@@ -4,56 +4,63 @@
   <ion-card class="login-card">
     <div class="logo-title-container">
       <app-logo class="logo"></app-logo>
-      
     </div>
 
     <ion-card-content class="login-content">
-      <form [formGroup] = "form" (ngSubmit)="login()" (keypress.enter)="login()">
-
+      <form [formGroup]="form" (ngSubmit)="login()" (keypress.enter)="login()">
 
         <app-custom-input 
-        name="Correo" 
-        autocomplete="email" 
-        [control]="form.controls.email" 
-        icon="mail-outline" type="email"></app-custom-input>
+          name="Correo" 
+          autocomplete="email" 
+          [control]="form.controls.email" 
+          icon="mail-outline" 
+          type="email">
+        </app-custom-input>
         <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.touched">
           <div *ngIf="form.controls.email.errors?.['required']">El correo es requerido</div>
           <div *ngIf="form.controls.email.errors?.['email']">El correo no es válido</div>
-
         </div>
+
         <app-custom-input 
-        name="Contraseña" 
-        icon="lock-closed-outline" 
-        [control]="form.controls.password" 
-        type="password">
-        <div class="validators" *ngIf="form.controls.password.errors && form.controls.password.touched">
-          <div *ngIf="form.controls.password.errors?.['required']">El correo es requerido</div>
-          
+          name="Contraseña" 
+          icon="lock-closed-outline" 
+          [control]="form.controls.password" 
+          type="password">
+          <div class="validators" *ngIf="form.controls.password.errors && form.controls.password.touched">
+            <div *ngIf="form.controls.password.errors?.['required']">La contraseña es requerida</div>
+          </div>
+        </app-custom-input>
 
-        </div>
-      </app-custom-input>
-      <ion-button
-       expand="full" 
-       class="login-button" 
-       mode="ios" 
-       type="submit" 
-       shape="round"
-       [disabled]="form.invalid"
-       >Ingresar</ion-button>
+        <ion-button
+          expand="full" 
+          class="login-button" 
+          mode="ios" 
+          type="submit" 
+          shape="round"
+          [disabled]="form.invalid"
+        >
+          Ingresar
+        </ion-button>
 
-       <ion-button 
-       class="login-register" 
-       routerLink="sign-up" 
-        expand="full" shape="round">
-        Registrarse
-      <ion-icon slot="end" name="person-add" color="white"></ion-icon>
-       </ion-button>
       </form>
 
+      <!-- Contenedor del botón de Google -->
+      <div id="google-button" class="google-button-container"></div>
+
+      <!-- Enlace de registro estilizado -->
+      
+
       <div class="extra-options">
+        
         <a routerLink="forgot-password">¿Olvidaste tu contraseña?</a>
+        <div class="register-link-container">
+        <a routerLink="sign-up" class="register-link">
+          Registrarse <ion-icon slot="end" name="person-add" color="primary"></ion-icon>
+        </a>
+      </div>
       </div>
     </ion-card-content>
   </ion-card>
 </div>
+
 <app-loading [isLoading]="isLoading" message="Verificando credenciales..."></app-loading>

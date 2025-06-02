@@ -1,6 +1,18 @@
 <app-header  [shoppingCart]="true" [notifications]="true" [showMenu]="true"  title="Mis Pedidos"></app-header>
 
 <ion-content>
+  <ion-item *ngIf="user().role === 'domiciliario'"  class="status-dropdown">
+    <ion-label>Filtrar por estado</ion-label>
+    <ion-select 
+    [(ngModel)]="selectedStatus" 
+    interface="popover" 
+    (ionChange)="getOrdersCarrier()"
+    class="ion-select-custom">
+      <ion-select-option *ngFor="let s of status" [value]="s">
+        {{ s }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
   <ion-list>
     <ion-item *ngFor="let order of orders" (click)="viewProduct(order.id)">
       <ion-label>
@@ -13,4 +25,8 @@
       <ion-icon name="chevron-forward-outline"></ion-icon>
     </ion-item>
   </ion-list>
+  <div class="no-pedidos" *ngIf="orders.length === 0">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>No hay pedidos disponibles.</p>
+    </div>
 </ion-content>
