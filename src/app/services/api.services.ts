@@ -10,7 +10,8 @@ import { Product } from "../models/products.model";
 })
 
 export class ApiService {
-    api: String = 'http://localhost:3000';
+    // api: String = 'http://34.48.202.254:8080'; // Uncomment this line and comment the next line to use the real API
+    api: String = 'http://localhost:3000'; // Change this to your API Fake URL 
 
     http = inject(HttpClient);
 

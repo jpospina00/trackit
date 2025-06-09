@@ -4,6 +4,7 @@ import { ShoppinCartsComponent } from '../shoppin-carts/shoppin-carts.component'
 import { CartService } from 'src/app/services/cart.service';
 import { PurchasedProduct } from 'src/app/models/purchased-product';
 import { NotificationsComponent } from '../notifications/notifications.component';
+import { ApiService } from 'src/app/services/api.services';
 
 @Component({
   selector: 'app-header',
@@ -19,10 +20,14 @@ export class HeaderComponent  implements OnInit {
   @Input() shoppingCart!: boolean;
   @Input() notifications!: boolean;
   @Input() showMenu!: boolean;
+  notificationsList: any[] = [];
+  notificationCount: number = 0;
 
   utilsSvc = inject(UtilsService);
   cardSvc = inject(CartService);
   cart: PurchasedProduct[] = [];
+
+  apiSvc = inject(ApiService);
   constructor() { }
 
   ngOnInit() {
@@ -31,6 +36,11 @@ export class HeaderComponent  implements OnInit {
       console.log('Carrito:', items);
       this.cart = items; // Se actualiza el carrito con los productos agregados
     });
+  }
+
+  if (this.notifications) {
+    this.loadNotifications();
+    setInterval(() => this.loadNotifications(), 10000); // cada 30 segundos
   }
   }
 
@@ -54,12 +64,39 @@ export class HeaderComponent  implements OnInit {
     // Aquí podrías redirigir a la página del carrito
   }
   
-  openNotifications() {
+  async openNotifications() {
     console.log('Abrir notificaciones');
-    this.utilsSvc.presentModal({
+    const data = await this.utilsSvc.presentModal({
           component: NotificationsComponent,
           cssClass: 'cart-modal',
         });
     // Aquí podrías redirigir a la página de notificaciones o mostrar un modal
+    console.log('Datos de notificaciones:', data);
+    if (data?.reload) {
+      this.loadNotifications(); // Recargar notificaciones si es necesario
+    }
   }
+
+  loadNotifications() {
+  const user = this.utilsSvc.getLocalStorage('user');
+
+  if (user) {
+    this.apiSvc.getNotifications(user.id).subscribe({
+      next: (notis) => {
+        this.notificationsList = notis.map((n: any) => ({
+          id: n.id,
+          message: n.message,
+          ...n
+        }));
+
+        // Supón que todas las notificaciones no leídas tienen un campo `read: false`
+        this.notificationCount = this.notificationsList.filter(n => !n.read).length;
+        console.log('Notificaciones:', this.notificationsList);
+      },
+      error: (err) => {
+        console.error('Error al cargar notificaciones:', err);
+      }
+    });
+  }
+}
 }

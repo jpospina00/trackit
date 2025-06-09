@@ -8,10 +8,8 @@
       <p>No tienes notificaciones por ahora.</p>
     </div>
 
-    <ion-card *ngFor="let notification of notifications"
-              class="notification-card"
-              [class.read]="notification.read"
-              (click)="viewNotification(notification)">
+    <ion-card *ngFor="let notification of notifications" class="notification-card" [class.read]="notification.read"
+      (click)="viewNotification(notification)">
       <ion-card-header>
         <ion-card-title>
           <ion-icon name="checkmark-done-circle" *ngIf="notification.read" class="read-icon"></ion-icon>

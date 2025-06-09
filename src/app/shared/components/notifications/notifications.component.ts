@@ -45,14 +45,15 @@ export class NotificationsComponent  implements OnInit {
 
   viewNotification(notification: Notification) {
     // Puedes marcarla como leída o redirigir al detalle
-    this.utilsSvc.routerLink('/main/orders');
-    this.utilsSvc.dismissModal();
+    
     this.apiSvc.markAsRead(notification.id).subscribe({
       next: () => {
-        this.utilsSvc.routerLink(`/main/notifications/${notification.id}`);
-        this.utilsSvc.dismissModal();
+        console.log('Notificación marcada como leída:', notification.id);
+        this.utilsSvc.dismissModal({reload: true});
+        this.utilsSvc.routerLink('/main/orders');
       }
     });
+        // this.utilsSvc.dismissModal();
   }
 
 }

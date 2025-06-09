@@ -21,9 +21,10 @@
 
     <ion-buttons slot="end">
       <!--========== Notifications =========-->
-      <ion-button *ngIf="notifications" (click)="openNotifications()">
-        <ion-icon name="notifications-outline"></ion-icon>
-      </ion-button>
+      <ion-button *ngIf="notifications" (click)="openNotifications()" class="notifications-button">
+  <ion-icon name="notifications-outline"></ion-icon>
+  <ion-badge *ngIf="notificationCount > 0" class="notification-badge">{{ notificationCount }}</ion-badge>
+</ion-button>
       
       <!--========== Shopping Cart =========-->
       <ion-button *ngIf="shoppingCart" (click)="openCart()" class="cart-button">
