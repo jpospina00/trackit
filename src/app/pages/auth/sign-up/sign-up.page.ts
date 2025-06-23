@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AlertController, ModalController } from '@ionic/angular';
+import { User } from 'src/app/models/user.model';
+import { ApiService } from 'src/app/services/api.services';
+import { UtilsService } from 'src/app/services/utils.services';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -20,7 +23,9 @@ export class SignUpPage implements OnInit {
     confirmPassword: new FormControl('', [Validators.required])
   },  { validators: this.validatePasswordMatch } );
 
-  roles: string[] = ['cliente', 'repartidor'];
+  roles: string[] = ['Customer', 'repartidor'];
+  apiSvc = inject(ApiService);
+  utilsSvc = inject(UtilsService);
 
   constructor(private alertCtrl: AlertController) { }
 
@@ -65,7 +70,38 @@ export class SignUpPage implements OnInit {
 
     console.log(this.form.value);
     this.isLoading = true;
-
+    const user: User = {
+      name: this.form.value.name ?? '',
+      email: this.form.value.email ?? '',
+      role: this.form.value.role ?? '',
+      lastName: '', // Puedes agregarlo si lo tienes en el formulario
+      address: '', // Puedes agregarlo si lo tienes en el formulario
+      enabled: true,
+      roleId: this.form.value.role === 'Customer' ? 3 : 2, // Asignar ID de rol según el tipo
+      password: this.form.value.password ?? '' // Asegúrate de manejar la contraseña
+    };
+    this.apiSvc.signUp(user).subscribe({
+      next: (res: any) => {
+        console.log('Respuesta del servidor:', res);
+        this.isLoading = false;
+        this.utilsSvc.presentToast({
+          message: 'Usuario registrado correctamente',
+          color: 'success',
+          duration: 2000,
+        });
+        // Aquí puedes redirigir al login o mostrar un mensaje de éxito
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.isLoading = false;
+        this.utilsSvc.presentToast({
+          message: err.error?.message || 'Error al registrar el usuario',
+          color: 'danger',
+          duration: 2000,
+        });
+        // Aquí puedes mostrar un mensaje de error
+      }
+    });
     setTimeout(() => {
       this.isLoading = false;
       console.log('Registro exitoso');

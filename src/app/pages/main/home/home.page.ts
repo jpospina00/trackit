@@ -38,7 +38,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     console.log("user");
     console.log(this.user());
-    if(this.user().role === 'domiciliario') {
+    if(this.user().role === 'Delivery') {
       this.filteredOrders = this.avalaibleOrders;
     }
     else {
@@ -49,7 +49,7 @@ export class HomePage implements OnInit {
   filterProducts() {
     this.filteredProducts = this.products.filter(p => {
       const matchesSearch = p.name.toLowerCase().includes(this.searchQuery.toLowerCase());
-      const matchesCategory = this.selectedCategory === '' || p.category === this.selectedCategory;
+      const matchesCategory = this.selectedCategory === '' || p.categoryName === this.selectedCategory;
       return matchesSearch && matchesCategory;
     });
   }
@@ -106,7 +106,7 @@ export class HomePage implements OnInit {
   }
 
   ionViewWillEnter() {
-    if(this.user().role === 'domiciliario') {
+    if(this.user().role === 'Delivery') {
       this.getOrders();
     }
     else {
@@ -120,7 +120,7 @@ export class HomePage implements OnInit {
         console.log("Respuesta del servidor:", response);
         this.products = response;
         this.filteredProducts = this.products;
-        this.categories = [...new Set(this.products.map(p => p.category))];
+        this.categories = [...new Set(this.products.map(p => p.categoryName))];
       },
       error: (err) => {
         console.error("Error en la petición:", err);

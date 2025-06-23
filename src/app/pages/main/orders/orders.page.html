@@ -1,7 +1,7 @@
 <app-header  [shoppingCart]="true" [notifications]="true" [showMenu]="true"  title="Mis Pedidos"></app-header>
 
 <ion-content>
-  <ion-item *ngIf="user().role === 'domiciliario'"  class="status-dropdown">
+  <ion-item *ngIf="user().role === 'Delivery'"  class="status-dropdown">
     <ion-label>Filtrar por estado</ion-label>
     <ion-select 
     [(ngModel)]="selectedStatus" 

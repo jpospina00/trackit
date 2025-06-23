@@ -56,7 +56,7 @@ export class CartService {
   // Actualizar el estado del carrito y el total
   private updateCartState() {
     this.cartSubject.next([...this.cart]); // Notificar cambios en el carrito
-    const newTotal = this.cart.reduce((sum, item) => sum + (item.price || 0), 0);
+    const newTotal = this.cart.reduce((sum, item) => sum + (item.unitPrice || 0), 0);
     this.totalSubject.next(newTotal); // Notificar el nuevo total
   }
 }

@@ -17,25 +17,25 @@
     <ion-item-sliding class="product-item"  *ngFor="let p of cart; let i = index">
       <ion-item>
         <ion-avatar slot="start">
-          <img [src]="p.urlImage" />
+          <img [src]="p.imageUrl" />
         </ion-avatar>
         <ion-label> 
           <div class="name">{{ p.name }}</div>
           <div class="data">
-            <strong>Precio: </strong> {{ p.price | currency:'USD':'symbol':'1.2-2' }} <br>
+            <strong>Precio: </strong> {{ p.unitPrice | currency:'USD':'symbol':'1.2-2' }} <br>
             <strong>Stock: </strong> {{ p.stock }} <br>
           </div>
         </ion-label>
   
-        <!-- Contenedor de cantidad + botón para usuarios que no son admin -->
+        <!-- Contenedor de cantidad + botón para usuarios que no son Administrator -->
         <div class="quantity-container">
-          <ion-input [(ngModel)]="p.quantity" type="number" min="1" [max]="p.stock" placeholder="1" class="quantity-input" >
+          <ion-input [(ngModel)]="p.quantity" type="number" min="1" [max]="p.stock ?? p.quantity" placeholder="1" class="quantity-input" >
           </ion-input>
           
         </div>
       </ion-item>
   
-      <!-- Opciones para admin -->
+      <!-- Opciones para Administrator -->
       <ion-item-options side="end">
         <ion-item-option color="danger" (click)="removeFromCart(i)">
           <ion-icon name="trash-outline"></ion-icon>

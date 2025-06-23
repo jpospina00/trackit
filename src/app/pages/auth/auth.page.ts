@@ -19,9 +19,9 @@ export class AuthPage implements OnInit {
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required])
-  });  
+  });
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngOnInit() {
     // Espera que el objeto google esté listo
@@ -81,9 +81,28 @@ export class AuthPage implements OnInit {
     this.apiSvc.signIn(this.form.value.email!, this.form.value.password!).subscribe({
       next: (response) => {
         console.log("Respuesta del servidor:", response);
-        this.utilsSvc.saveLocalStorage('user', response.user);
-        this.utilsSvc.saveLocalStorage('token', response.token);
-        this.utilsSvc.routerLink('/main/home');
+        this.utilsSvc.saveLocalStorage('token', response);
+        this.apiSvc.getUserByEmail(this.form.value.email!, response).subscribe({
+          next: (userResponse) => {
+            const user = userResponse[0];
+            const userToSave = {
+              ...user,
+              role: user.role.name, // Guarda solo el nombre del rol
+            };
+
+            console.log("Usuario formateado:", userToSave);
+            this.utilsSvc.saveLocalStorage('user', userToSave);
+            this.utilsSvc.routerLink('/main/home');
+          },
+          error: (userError) => {
+            console.error("Error al obtener el usuario:", userError);
+            this.utilsSvc.presentToast({
+              message: userError.error?.message || 'Error al obtener el usuario',
+              color: 'danger',
+              duration: 2000,
+            });
+          }
+        });
         loading.dismiss();
         this.form.reset();
       },

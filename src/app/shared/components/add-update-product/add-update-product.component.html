@@ -8,7 +8,7 @@
           
           <app-custom-input 
             name="Nombre del Producto" 
-            icon="pricetag-outline" 
+            icon="unitPricetag-outline" 
             [control]="form.controls.name" 
             type="text">
           </app-custom-input>
@@ -38,14 +38,14 @@
           <app-custom-input 
             name="Precio" 
             icon="cash-outline" 
-            [control]="form.controls.price" 
+            [control]="form.controls.unitPrice" 
             type="number">
           </app-custom-input>
-          <div class="validators" *ngIf="form.controls.price.errors && form.controls.price.touched">
-            <div *ngIf="form.controls.price.errors?.['required']">
+          <div class="validators" *ngIf="form.controls.unitPrice.errors && form.controls.unitPrice.touched">
+            <div *ngIf="form.controls.unitPrice.errors?.['required']">
               El precio es requerido
             </div>
-            <div *ngIf="form.controls.price.errors?.['min']">
+            <div *ngIf="form.controls.unitPrice.errors?.['min']">
               Debe ser mayor a 0
             </div>
           </div>

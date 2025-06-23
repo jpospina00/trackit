@@ -4,22 +4,22 @@
   <ion-list>
     <ion-item *ngFor="let product of products">
       <ion-thumbnail slot="start">
-        <img [src]="product.urlImage" alt="{{ product.name }}" />
+        <img [src]="product.imageUrl" alt="{{ product.name }}" />
       </ion-thumbnail>
       <ion-label>
         <h2>{{ product.name }}</h2>
         <p>Cantidad: {{ product.quantity }}</p>
-        <p>Precio unitario: {{ product.price | currency:'COP' }}</p>
-        <p><strong>Total: {{ product.quantity * product.price | currency:'COP' }}</strong></p>
+        <p>Precio unitario: {{ product.unitPrice | currency:'COP' }}</p>
+        <p><strong>Total: {{ product.quantity * product.unitPrice | currency:'COP' }}</strong></p>
       </ion-label>
     </ion-item>
   </ion-list>
 
-  <!-- Botón solo visible si el rol es domiciliario -->
+  <!-- Botón solo visible si el rol es Delivery -->
   <ion-button
     expand="block"
     color="primary"
-    *ngIf="role === 'domiciliario' && orderStatus !== 'Entregado'"
+    *ngIf="role === 'Delivery' && orderStatus !== 'Entregado'"
     (click)="advanceOrderStatus()"
   >
     Entregado

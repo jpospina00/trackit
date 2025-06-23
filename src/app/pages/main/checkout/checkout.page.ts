@@ -41,7 +41,7 @@ export class CheckoutPage implements OnInit {
 
     const items = this.cartSvc.getCart().map(item => ({
       name: item.name,
-      price: item.price,
+      unitPrice: item.unitPrice,
       quantity: item.quantity,
       id: item.id,
       userId: this.user().id!,

@@ -30,7 +30,7 @@ export class OrdersPage implements OnInit {
 
   ionViewWillEnter() {
     const userRole: String = this.user().role;
-    if (userRole === 'domiciliario') {
+    if (userRole === 'Delivery') {
       this.getOrdersCarrier();
     } else {
       this.getOrders();
@@ -63,7 +63,7 @@ export class OrdersPage implements OnInit {
 
       if (data?.reload) {
         console.log("Recargando órdenes...");
-        if (this.user().role === 'domiciliario') {
+        if (this.user().role === 'Delivery') {
           this.getOrdersCarrier();
         } else {
           this.getOrders();

@@ -1,26 +1,46 @@
 import { inject, Injectable } from "@angular/core";
 import { User } from "../models/user.model";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, switchMap } from "rxjs";
 import { Order } from "../models/orders.model";
 import { Product } from "../models/products.model";
+import { UtilsService } from "./utils.services";
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class ApiService {
-    // api: String = 'http://34.48.202.254:8080'; // Uncomment this line and comment the next line to use the real API
-    api: String = 'http://localhost:3000'; // Change this to your API Fake URL 
+    api: String = 'http://34.71.84.140:8080'; // Uncomment this line and comment the next line to use the real API
+    // api: String = 'http://localhost:3000'; // Change this to your API Fake URL 
 
     http = inject(HttpClient);
+    utilsSvc = inject(UtilsService);
+    token: string = this.utilsSvc.getLocalStorage('token') || '';
 
     signIn(email: string, password: string): Observable<any> {
-        return this.http.post(`${this.api}/auth/login`, { email, password });
+        return this.http.post(`${this.api}/auth/login`, { email, password }, { responseType: 'text' });
     }
 
     signUp(user: User): Observable<any> {
-        return this.http.post(`${this.api}/register`, user);
+        const newUser = {
+            user: user,
+            auth: {
+                email: user.email,
+                password: user.password
+            }
+        };
+        console.log('User data:', user);
+        return this.http.post(`${this.api}/auth/register`, newUser);
+    }
+
+
+    getUserByEmail(email: string, token: string): Observable<any> {
+        return this.http.post(`${this.api}/users/get-users`, { email }, { headers: { Authorization: `Bearer ${token}` } });
+    }
+
+    updateUser(user: User): Observable<any> {
+        return this.http.put(`${this.api}/users/${user.id}`, user, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     forgotPassword(email: string): Observable<any> {
@@ -28,11 +48,11 @@ export class ApiService {
     }
 
     getProducts(): Observable<any> {
-        return this.http.get(`${this.api}/products`);
+        return this.http.get(`${this.api}/products`, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
-    createProduct(product: Product): Observable<any> {
-        return this.http.post(`${this.api}/products`, product);
+    createProductFormData(formData: FormData): Observable<any> {
+        return this.http.post(`${this.api}/products`, formData, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     deleteProduct(id: string): Observable<any> {
@@ -80,8 +100,8 @@ export class ApiService {
     }
 
     signInWithGoogle(idToken: string): Observable<any> {
-    return this.http.post(`${this.api}/auth/google-login`, { idToken });
-}
+        return this.http.post(`${this.api}/auth/google-login`, { idToken });
+    }
 
     createCheckoutSession(items: any[]): Observable<any> {
         return this.http.post(`${this.api}/checkout/create-checkout-session`, { items });

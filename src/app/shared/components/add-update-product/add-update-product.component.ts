@@ -18,7 +18,7 @@ export class AddUpdateProductComponent implements OnInit {
   // Tipamos el FormGroup usando genéricos para que cada control sea un FormControl del tipo indicado.
   form = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    price: new FormControl(0, [Validators.required, Validators.min(1)]),
+    unitPrice: new FormControl(0, [Validators.required, Validators.min(1)]),
     description: new FormControl('', [Validators.required]),
     stock: new FormControl(0, [Validators.required, Validators.min(1)]),
     image: new FormControl<File | null>(null, []),
@@ -36,12 +36,12 @@ export class AddUpdateProductComponent implements OnInit {
     if (this.product) {
       this.form.patchValue({
         name: this.product.name,
-        price: this.product.price,
+        unitPrice: this.product.unitPrice,
         description: this.product.description,
         stock: this.product.stock,
-        category: this.product.category,
+        category: this.product.categoryName,
       });
-      this.selectedImage = this.product.urlImage; // Asignar la imagen del producto existente
+      this.selectedImage = this.product.imageUrl; // Asignar la imagen del producto existente
     }
   }
 
@@ -67,19 +67,19 @@ export class AddUpdateProductComponent implements OnInit {
 
     const updatedData: Product = {
       name: formValue.name!,
-      price: formValue.price!,
+      unitPrice: formValue.unitPrice!,
       description: formValue.description!,
       stock: formValue.stock!,
-      category: formValue.category!,
-      urlImage: this.selectedImage, // Ojo aquí: deberías subir la imagen si cambió (ver nota abajo)
+      categoryName: formValue.category!,
+      imageUrl: this.selectedImage, // Ojo aquí: deberías subir la imagen si cambió (ver nota abajo)
     };
 
     // Si hay nueva imagen, debes manejar la subida antes de hacer el update
     if (formValue.image instanceof File) {
       // Suponiendo que tienes un método en apiSvc para subir la imagen y obtener la URL
       // const imageUrl = await this.apiSvc.uploadImage(formValue.image);
-      // updatedData.urlImage = imageUrl;
-      updatedData.urlImage = 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80';
+      // updatedData.imageUrl = imageUrl;
+      updatedData.imageUrl = 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80';
     }
 
     this.apiSvc.updateProduct(this.product.id!, updatedData).subscribe({
@@ -131,14 +131,20 @@ export class AddUpdateProductComponent implements OnInit {
     
     const newProduct: Product = {
       name: formValue.name!,
-      price: formValue.price!,
+      unitPrice: formValue.unitPrice!,
       description: formValue.description!,
-      stock: formValue.stock!,
-      category: formValue.category!,
-      urlImage: 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80'
+      quantity: formValue.stock!,
+      categoryId: 1,
     };
 
-    this.apiSvc.createProduct(newProduct).subscribe({
+     const formData = new FormData();
+  formData.append('product', JSON.stringify(newProduct)); // Enviamos el JSON como string
+  if (formValue.image instanceof File) {
+    console.log('Imagen seleccionada:', formValue.image);
+    formData.append('image', formValue.image); // Imagen
+  }
+  
+    this.apiSvc.createProductFormData(formData).subscribe({
       next: (response) => {
         console.log("Respuesta del servidor:", response);
         this.utilsSvc.presentToast({
