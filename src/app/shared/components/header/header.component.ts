@@ -28,20 +28,37 @@ export class HeaderComponent  implements OnInit {
   cart: PurchasedProduct[] = [];
 
   apiSvc = inject(ApiService);
+
+  private intervalId: any;
   constructor() { }
 
-  ngOnInit() {
-    if(this.shoppingCart) {
-    this.cardSvc.cart$.subscribe((items) => {
-      console.log('Carrito:', items);
-      this.cart = items; // Se actualiza el carrito con los productos agregados
-    });
+   ngOnInit() {
+    if (this.shoppingCart) {
+      this.cardSvc.cart$.subscribe((items) => {
+        this.cart = items;
+      });
+    }
+
+    if (this.notifications) {
+      const user = this.utilsSvc.getLocalStorage('user');
+      if (user) {
+        this.loadNotifications();
+        this.intervalId = setInterval(() => {
+          const user = this.utilsSvc.getLocalStorage('user');
+          if (user) {
+            this.loadNotifications();
+          } else {
+            clearInterval(this.intervalId); // detener si no hay usuario
+          }
+        }, 10000);
+      }
+    }
   }
 
-  if (this.notifications) {
-    this.loadNotifications();
-    setInterval(() => this.loadNotifications(), 10000); // cada 30 segundos
-  }
+  ngOnDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   openSettings() {

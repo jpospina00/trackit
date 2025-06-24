@@ -73,9 +73,9 @@ export class SignUpPage implements OnInit {
     const user: User = {
       name: this.form.value.name ?? '',
       email: this.form.value.email ?? '',
-      role: this.form.value.role ?? '',
-      lastName: '', // Puedes agregarlo si lo tienes en el formulario
-      address: '', // Puedes agregarlo si lo tienes en el formulario
+      // role: this.form.value.role ?? '',
+      lastName: 'ospina', // Puedes agregarlo si lo tienes en el formulario
+      address: 'calle ce', // Puedes agregarlo si lo tienes en el formulario
       enabled: true,
       roleId: this.form.value.role === 'Customer' ? 3 : 2, // Asignar ID de rol según el tipo
       password: this.form.value.password ?? '' // Asegúrate de manejar la contraseña

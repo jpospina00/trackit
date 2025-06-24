@@ -56,120 +56,128 @@ export class AddUpdateProductComponent implements OnInit {
 
   // ======Update product======
   async updatedProduct() {
-    if (!this.product) return;
+  if (!this.product) return;
 
-    this.isLoading = true;
-    const loading = await this.utilsSvc.loading();
-    await loading.present();
+  this.isLoading = true;
+  const loading = await this.utilsSvc.loading();
+  await loading.present();
 
+  const formValue = this.form.value;
 
-    const formValue = this.form.value;
+  const updatedProduct: Product = {
+    name: formValue.name!,
+    unitPrice: formValue.unitPrice!,
+    description: formValue.description!,
+    quantity: formValue.stock!, // <- mismo campo que en `saveProduct`
+    categoryId: 1,              // <- pon aquí el ID correcto de la categoría
+  };
 
-    const updatedData: Product = {
-      name: formValue.name!,
-      unitPrice: formValue.unitPrice!,
-      description: formValue.description!,
-      stock: formValue.stock!,
-      categoryName: formValue.category!,
-      imageUrl: this.selectedImage, // Ojo aquí: deberías subir la imagen si cambió (ver nota abajo)
-    };
+  const formData = new FormData();
+  const productBlob = new Blob(
+    [JSON.stringify(updatedProduct)],
+    { type: 'application/json' }
+  );
+  formData.append('product', productBlob);
 
-    // Si hay nueva imagen, debes manejar la subida antes de hacer el update
-    if (formValue.image instanceof File) {
-      // Suponiendo que tienes un método en apiSvc para subir la imagen y obtener la URL
-      // const imageUrl = await this.apiSvc.uploadImage(formValue.image);
-      // updatedData.imageUrl = imageUrl;
-      updatedData.imageUrl = 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80';
-    }
-
-    this.apiSvc.updateProduct(this.product.id!, updatedData).subscribe({
-      next: (response) => {
-        console.log("Respuesta del servidor:", response);
-        this.utilsSvc.presentToast({
-          message: 'Producto actualizado correctamente',
-          duration: 2000,
-          color: 'success',
-          position: 'middle'
-        });
-        this.router.navigate(['/main']);
-        this.isLoading = false;
-        loading.dismiss();
-        this.utilsSvc.dismissModal();
-      },
-      error: (err) => {
-        console.error("Error en la petición:", err);
-        this.utilsSvc.presentToast({
-          message: 'Error al actualizar el producto',
-          duration: 2000,
-          color: 'danger',
-          position: 'middle'
-        });
-        this.isLoading = false;
-        loading.dismiss();
-      },
-    });
-
+  if (formValue.image instanceof File) {
+    formData.append('file', formValue.image);
   }
+
+  this.apiSvc.updateProduct(this.product.code!, formData).subscribe({
+    next: (response) => {
+      console.log("Respuesta del servidor:", response);
+      this.utilsSvc.presentToast({
+        message: 'Producto actualizado correctamente',
+        duration: 2000,
+        color: 'success',
+        position: 'middle'
+      });
+      this.router.navigate(['/main']);
+      this.isLoading = false;
+      loading.dismiss();
+      this.utilsSvc.dismissModal();
+    },
+    error: (err) => {
+      console.error("Error en la petición:", err);
+      this.utilsSvc.presentToast({
+        message: 'Error al actualizar el producto',
+        duration: 2000,
+        color: 'danger',
+        position: 'middle'
+      });
+      this.isLoading = false;
+      loading.dismiss();
+    },
+  });
+}
 
 
   // ======Add product======
   async saveProduct() {
-    console.log('Estado del formulario:', this.form.status);
-    console.log('Errores globales del formulario:', this.form.errors);
-    Object.keys(this.form.controls).forEach(key => {
-      const controlErrors = this.form.get(key)?.errors;
-      if (controlErrors) {
-        console.log(`Errores en ${key}:`, controlErrors);
-      }
-    });
+  console.log('Estado del formulario:', this.form.status);
+  console.log('Errores globales del formulario:', this.form.errors);
+  Object.keys(this.form.controls).forEach(key => {
+    const controlErrors = this.form.get(key)?.errors;
+    if (controlErrors) {
+      console.log(`Errores en ${key}:`, controlErrors);
+    }
+  });
 
+  this.isLoading = true;
+  const loading = await this.utilsSvc.loading();
+  await loading.present();
 
-    this.isLoading = true;
-    const loading = await this.utilsSvc.loading();
-    await loading.present();
-    const formValue = this.form.value;
-    
-    const newProduct: Product = {
-      name: formValue.name!,
-      unitPrice: formValue.unitPrice!,
-      description: formValue.description!,
-      quantity: formValue.stock!,
-      categoryId: 1,
-    };
+  const formValue = this.form.value;
 
-     const formData = new FormData();
-  formData.append('product', JSON.stringify(newProduct)); // Enviamos el JSON como string
+  const newProduct: Product = {
+    name: formValue.name!,
+    unitPrice: formValue.unitPrice!,
+    description: formValue.description!,
+    quantity: formValue.stock!,
+    categoryId: 1,
+  };
+
+  // ✅ Crear FormData con el objeto como BLOB (application/json)
+  const formData = new FormData();
+  const productBlob = new Blob(
+    [JSON.stringify(newProduct)],
+    { type: 'application/json' }
+  );
+  formData.append('product', productBlob);
+
+  // ✅ Adjuntar la imagen si fue seleccionada
   if (formValue.image instanceof File) {
     console.log('Imagen seleccionada:', formValue.image);
-    formData.append('image', formValue.image); // Imagen
+    formData.append('file', formValue.image);
   }
-  
-    this.apiSvc.createProductFormData(formData).subscribe({
-      next: (response) => {
-        console.log("Respuesta del servidor:", response);
-        this.utilsSvc.presentToast({
-          message: 'Producto creado correctamente',
-          duration: 2000,
-          color: 'success',
-          position: 'middle'
-        });
-        this.isLoading = false;
-        loading.dismiss();
-        this.utilsSvc.dismissModal();
-      },
-      error: (err) => {
-        console.error("Error en la petición:", err);
-        this.utilsSvc.presentToast({
-          message: 'Error al crear el producto',
-          duration: 2000,
-          color: 'danger',
-          position: 'middle'
-        });
-        this.isLoading = false;
-        loading.dismiss();
-      }
-    });
-  }
+
+  // ✅ Llamada al backend
+  this.apiSvc.createProductFormData(formData).subscribe({
+    next: (response) => {
+      console.log("Respuesta del servidor:", response);
+      this.utilsSvc.presentToast({
+        message: 'Producto creado correctamente',
+        duration: 2000,
+        color: 'success',
+        position: 'middle'
+      });
+      this.isLoading = false;
+      loading.dismiss();
+      this.utilsSvc.dismissModal();
+    },
+    error: (err) => {
+      console.error("Error en la petición:", err);
+      this.utilsSvc.presentToast({
+        message: 'Error al crear el producto',
+        duration: 2000,
+        color: 'danger',
+        position: 'middle'
+      });
+      this.isLoading = false;
+      loading.dismiss();
+    }
+  });
+}
 
   submit() {
     if (this.form.valid) {

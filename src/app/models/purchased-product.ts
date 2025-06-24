@@ -2,7 +2,7 @@ export interface PurchasedProduct {
     name: string;
     unitPrice: number;
     description: string;
-    id?: string;
+    code?: string;
     imageUrl?: string;
     stock?: number;
     categoryName?: string;

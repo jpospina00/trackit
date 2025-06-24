@@ -56,7 +56,7 @@ export class HomePage implements OnInit {
 
   filterOrders() {
     this.filteredOrders = this.avalaibleOrders.filter(p => {
-      const matchesSearch = p.id.toLowerCase().includes(this.searchQuery.toLowerCase()) || p.address.toLowerCase().includes(this.searchQuery.toLowerCase());
+      const matchesSearch = p.orderId.toLowerCase().includes(this.searchQuery.toLowerCase()) || p.deliveryAddress.toLowerCase().includes(this.searchQuery.toLowerCase());
       return matchesSearch;
     });
   }
@@ -71,6 +71,25 @@ export class HomePage implements OnInit {
   }
   
   addToCart(product: Product) {
+    const quantity = Number(product.quantity);
+
+  if (!quantity || quantity < 1) {
+    this.utilsSvc.presentToast({
+      message: 'Ingresa una cantidad válida.',
+      color: 'danger',
+      duration: 2000,
+    });
+    return;
+  }
+
+  if (quantity > product.stock!) {
+    this.utilsSvc.presentToast({
+      message: `Solo hay ${product.stock} unidades disponibles.`,
+      color: 'warning',
+      duration: 2000,
+    });
+    return;
+  }
     const purchasedProduct: PurchasedProduct = {
         ...product,
         quantity: product.quantity || 1 
@@ -79,7 +98,7 @@ export class HomePage implements OnInit {
     console.log('Añadir al carrito:', purchasedProduct);
 }
   deleteProduct(product: Product) {
-    this.apiSvc.deleteProduct(product.id!).subscribe({
+    this.apiSvc.deleteProduct(product.code!).subscribe({
       next: (response) => {
         console.log("Respuesta del servidor:", response);
         this.utilsSvc.presentToast({
@@ -118,7 +137,11 @@ export class HomePage implements OnInit {
     this.apiSvc.getProducts().subscribe({
       next: (response) => {
         console.log("Respuesta del servidor:", response);
-        this.products = response;
+        this.products = response.map((p: any) => ({
+        ...p,
+        quantity: 1,
+        stock: p.quantity // copia el valor de quantity a stock
+      }));
         this.filteredProducts = this.products;
         this.categories = [...new Set(this.products.map(p => p.categoryName))];
       },
@@ -152,7 +175,7 @@ export class HomePage implements OnInit {
   };
 
   assignOrderToCarrier(order: Order) {
-    this.apiSvc.assignOrderToCarrier(order.id, this.user().id!).subscribe({
+    this.apiSvc.assignOrderToCarrier(order.orderId, this.user().id!).subscribe({
       next: (response) => {
         console.log("Respuesta del servidor:", response);
         this.utilsSvc.presentToast({

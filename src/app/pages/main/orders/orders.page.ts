@@ -29,7 +29,7 @@ export class OrdersPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    const userRole: String = this.user().role;
+    const userRole: String = this.user().role!;
     if (userRole === 'Delivery') {
       this.getOrdersCarrier();
     } else {
@@ -49,12 +49,31 @@ export class OrdersPage implements OnInit {
       this.apiSvc.getOrderById(orderId).subscribe({
       next: async (response) => {
         console.log("Respuesta del servidor:", response);
-        const products = response;
-        const data = await this.utilsSvc.presentModal({
+        const purchaseProducts = (response as any[]).map(p => ({
+        ...p,
+        code: p.productId,
+        productId: undefined // opcional: eliminar el campo original
+      }));
+        console.log("Productos comprados:", purchaseProducts);
+      // Obtener los detalles de todos los productos en paralelo
+      const productDetailsPromises = purchaseProducts.map(item =>
+        this.apiSvc.getProductById(item.code!).toPromise()
+      );
+
+      const productDetails = await Promise.all(productDetailsPromises);
+
+      // Combinar la información de compra con la del producto
+      const combinedProducts = purchaseProducts.map((purchase, index) => ({
+        ...purchase,
+        ...productDetails[index]
+      }));
+
+      // Abrir el modal con los productos combinados
+      const data = await this.utilsSvc.presentModal({
         component: ViewOrderProductsComponent,
         cssClass: 'add-update-modal',
         componentProps: {
-          products: products,
+          products: combinedProducts,
           role: this.user().role,
           orderId: orderId,
           orderStatus: this.selectedStatus,

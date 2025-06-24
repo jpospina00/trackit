@@ -1,8 +1,9 @@
 export interface Order {
-    id: string;
-    status: string;
+    orderId: string;
+    paymentStatusId: number;
     carrier: string;
-    paymentMethod: string;
-    address: string;
+    userId?: string;
+    paymentTypeId: number;
+    deliveryAddress: string;
     total: number;
   }

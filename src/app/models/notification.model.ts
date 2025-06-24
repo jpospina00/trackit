@@ -1,7 +1,7 @@
 export interface Notification {
   id: number;
   title: string;
-  message: string;
+  description: string;
   createdAt?: string;
-  read?: boolean;
+  status?: boolean;
 }

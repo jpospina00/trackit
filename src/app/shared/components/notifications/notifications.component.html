@@ -8,16 +8,16 @@
       <p>No tienes notificaciones por ahora.</p>
     </div>
 
-    <ion-card *ngFor="let notification of notifications" class="notification-card" [class.read]="notification.read"
+    <ion-card *ngFor="let notification of notifications" class="notification-card" [class.read]="!notification.status"
       (click)="viewNotification(notification)">
       <ion-card-header>
         <ion-card-title>
-          <ion-icon name="checkmark-done-circle" *ngIf="notification.read" class="read-icon"></ion-icon>
+          <ion-icon name="checkmark-done-circle" *ngIf="notification.status" class="read-icon"></ion-icon>
           {{ notification.title || 'Notificación' }}
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <p>{{ notification.message }}</p>
+        <p>{{ notification.description }}</p>
         <span class="timestamp">{{ notification.createdAt | date:'short' }}</span>
       </ion-card-content>
     </ion-card>

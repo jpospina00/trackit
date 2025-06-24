@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { User } from "../models/user.model";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Observable, switchMap } from "rxjs";
 import { Order } from "../models/orders.model";
 import { Product } from "../models/products.model";
@@ -16,7 +16,9 @@ export class ApiService {
 
     http = inject(HttpClient);
     utilsSvc = inject(UtilsService);
-    token: string = this.utilsSvc.getLocalStorage('token') || '';
+    get token(): string {
+  return this.utilsSvc.getLocalStorage('token') || '';
+}
 
     signIn(email: string, password: string): Observable<any> {
         return this.http.post(`${this.api}/auth/login`, { email, password }, { responseType: 'text' });
@@ -52,27 +54,40 @@ export class ApiService {
     }
 
     createProductFormData(formData: FormData): Observable<any> {
-        return this.http.post(`${this.api}/products`, formData, { headers: { Authorization: `Bearer ${this.token}` } });
-    }
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`
+    // No pongas Content-Type aquí ❌
+  });
+
+  return this.http.post(`${this.api}/products`, formData, { headers });
+}
 
     deleteProduct(id: string): Observable<any> {
-        return this.http.delete(`${this.api}/products/${id}`);
+        return this.http.delete(`${this.api}/products/${id}`, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
-    updateProduct(id: string, product: Product): Observable<any> {
-        return this.http.put(`${this.api}/products/${id}`, product);
+    updateProduct(productCode: string, formData: FormData): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`
+  });
+
+  return this.http.put(`${this.api}/products/${productCode}`, formData, { headers });
+}
+
+    getProductById(id: string): Observable<Product> {
+        return this.http.get<Product>(`${this.api}/products/${id}`, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     getNotifications(id: String): Observable<Notification[]> {
-        return this.http.get<Notification[]>(`${this.api}/notifications/user/${id}`);
+        return this.http.get<Notification[]>(`${this.api}/notifications/${id}`, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     markAsRead(id: number): Observable<any> {
-        return this.http.patch(`${this.api}/notifications/${id}/read`, {});
+        return this.http.put(`${this.api}/notifications/${id}`, {}, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     getNotificationById(id: number): Observable<Notification> {
-        return this.http.get<Notification>(`${this.api}/notifications/${id}`);
+        return this.http.get<Notification>(`${this.api}/notifications/${id}`, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     assignOrderToCarrier(orderId: string, carrierId: string): Observable<any> {
@@ -83,16 +98,20 @@ export class ApiService {
         return this.http.get<Order[]>(`${this.api}/orders/avaliable`);
     }
 
+    createOrder(order: any): Observable<any> {
+        return this.http.post(`${this.api}/orders/purchases`, order, { headers: { Authorization: `Bearer ${this.token}` } });
+    }
+
     getOrdersByUser(userId: string): Observable<Order[]> {
-        return this.http.get<Order[]>(`${this.api}/orders/user/${userId}`);
+        return this.http.get<Order[]>(`${this.api}/orders/purchases/${userId}`, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     getOrdersByCarrier(userId: string, status: string): Observable<Order[]> {
         return this.http.post<Order[]>(`${this.api}/orders/carrier/${userId}`, { status });
     }
 
-    getOrderById(orderId: string): Observable<Order[]> {
-        return this.http.get<Order[]>(`${this.api}/orders/${orderId}`);
+    getOrderById(orderId: string): Observable<any> {
+        return this.http.get<any>(`${this.api}/orders/purchases/${orderId}/products`, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     advanceOrderStatus(orderId: string, status: string): Observable<any> {
@@ -103,8 +122,12 @@ export class ApiService {
         return this.http.post(`${this.api}/auth/google-login`, { idToken });
     }
 
-    createCheckoutSession(items: any[]): Observable<any> {
-        return this.http.post(`${this.api}/checkout/create-checkout-session`, { items });
-    }
+    createTestPayment(amount: number, currency: string): Observable<any> {
+  const params = new HttpParams()
+    .set('amount', amount.toString())
+    .set('currency', currency);
+
+  return this.http.post(`${this.api}/payments/create-test-payment`, null, { params, headers: { Authorization: `Bearer ${this.token}` } },);
+}
 
 }
