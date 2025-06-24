@@ -198,14 +198,18 @@ export class HomePage implements OnInit {
 
 
   // ========= Agregar o actualizar un producto =========
-  addUpdateProduct(Product?: Product) {
-    this.utilsSvc.presentModal({
+  async addUpdateProduct(Product?: Product) {
+    const data = await this.utilsSvc.presentModal({
       component: AddUpdateProductComponent,
       cssClass: 'add-update-modal',
       componentProps: {
         product: Product,
       },
     });
+    if (data?.reload) {
+        console.log("Recargando órdenes...");
+        this.getProducts();
+    }
   }
 
   // ========= Ver carrito de compras =========
