@@ -95,7 +95,7 @@ export class AddUpdateProductComponent implements OnInit {
       this.router.navigate(['/main']);
       this.isLoading = false;
       loading.dismiss();
-      this.utilsSvc.dismissModal();
+      this.utilsSvc.dismissModal({reload: true});
     },
     error: (err) => {
       console.error("Error en la petición:", err);
