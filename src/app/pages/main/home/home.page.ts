@@ -22,7 +22,7 @@ export class HomePage implements OnInit {
   apiSvc = inject(ApiService);
 
   products: Product[] = [];
-  avalaibleOrders : Order[] = [
+  avalaibleOrders: Order[] = [
     // { id: '12345', status: 'En camino', carrier: 'DHL', paymentMethod: 'Tarjeta', total: 150000, address: 'Calle Falsa 123' },
     // { id: '67890', status: 'Entregado', carrier: 'FedEx', paymentMethod: 'Efectivo', total: 200000, address: 'Avenida Siempre Viva 742' },
   ];
@@ -31,18 +31,18 @@ export class HomePage implements OnInit {
   filteredOrders: any[] = [];
   categories: any = [];
   llevar: any = [];
-  selectedCategory: string = ''; 
+  selectedCategory: string = '';
   page: number = 1;
-  
+
 
   ngOnInit() {
     console.log("user");
     console.log(this.user());
-    if(this.user().role === 'Delivery') {
+    if (this.user().role === 'Delivery') {
       this.filteredOrders = this.avalaibleOrders;
     }
     else {
-    this.filteredProducts = this.products;
+      this.filteredProducts = this.products;
     }
   }
 
@@ -60,7 +60,7 @@ export class HomePage implements OnInit {
       return matchesSearch;
     });
   }
-  
+
   openCategoryFilter() {
     // Aquí puedes abrir un modal o alert para seleccionar una categoría
     console.log("Abrir filtro de categorías");
@@ -69,34 +69,34 @@ export class HomePage implements OnInit {
   user(): User {
     return this.utilsSvc.getLocalStorage('user');
   }
-  
+
   addToCart(product: Product) {
     const quantity = Number(product.quantity);
 
-  if (!quantity || quantity < 1) {
-    this.utilsSvc.presentToast({
-      message: 'Ingresa una cantidad válida.',
-      color: 'danger',
-      duration: 2000,
-    });
-    return;
-  }
+    if (!quantity || quantity < 1) {
+      this.utilsSvc.presentToast({
+        message: 'Ingresa una cantidad válida.',
+        color: 'danger',
+        duration: 2000,
+      });
+      return;
+    }
 
-  if (quantity > product.stock!) {
-    this.utilsSvc.presentToast({
-      message: `Solo hay ${product.stock} unidades disponibles.`,
-      color: 'warning',
-      duration: 2000,
-    });
-    return;
-  }
+    if (quantity > product.stock!) {
+      this.utilsSvc.presentToast({
+        message: `Solo hay ${product.stock} unidades disponibles.`,
+        color: 'warning',
+        duration: 2000,
+      });
+      return;
+    }
     const purchasedProduct: PurchasedProduct = {
-        ...product,
-        quantity: product.quantity || 1 
+      ...product,
+      quantity: product.quantity || 1
     };
     this.cardSvc.addToCart(purchasedProduct);
     console.log('Añadir al carrito:', purchasedProduct);
-}
+  }
   deleteProduct(product: Product) {
     this.apiSvc.deleteProduct(product.code!).subscribe({
       next: (response) => {
@@ -125,7 +125,7 @@ export class HomePage implements OnInit {
   }
 
   ionViewWillEnter() {
-    if(this.user().role === 'Delivery') {
+    if (this.user().role === 'Delivery') {
       this.getOrders();
     }
     else {
@@ -138,10 +138,10 @@ export class HomePage implements OnInit {
       next: (response) => {
         console.log("Respuesta del servidor:", response);
         this.products = response.map((p: any) => ({
-        ...p,
-        quantity: 1,
-        stock: p.quantity // copia el valor de quantity a stock
-      }));
+          ...p,
+          quantity: 1,
+          stock: p.quantity // copia el valor de quantity a stock
+        }));
         this.filteredProducts = this.products;
         this.categories = [...new Set(this.products.map(p => p.categoryName))];
       },
@@ -160,7 +160,7 @@ export class HomePage implements OnInit {
     this.apiSvc.getAvaliableOrders().subscribe({
       next: (response) => {
         console.log("Respuesta del servidor:", response);
-        this.avalaibleOrders = response.filter(order => order.deliveryName === 'Processing');
+        this.avalaibleOrders = response;
         this.filteredOrders = this.avalaibleOrders;
       },
       error: (err) => {
@@ -175,15 +175,56 @@ export class HomePage implements OnInit {
   };
 
   assignOrderToCarrier(order: Order) {
-    this.apiSvc.assignOrderToCarrier(order.orderId, this.user().id!).subscribe({
-      next: (response) => {
-        console.log("Respuesta del servidor:", response);
-        this.utilsSvc.presentToast({
-          message: 'Pedido asignado correctamente',
-          color: 'success',
-          duration: 2000,
+    this.apiSvc.getProductsByOrderId(order.orderId).subscribe({
+      next: (productsResponse) => {
+        console.log("Productos de la orden:", productsResponse);
+        order.products = productsResponse;
+
+        // Ahora sí, luego de tener los productos, asignas el pedido
+        this.apiSvc.assignOrderToCarrier(order.deliveryId!, this.user().id!, order.orderId).subscribe({
+          next: (assignResponse) => {
+            console.log('orden: ', order);
+            console.log("Respuesta del servidor:", assignResponse);
+            const orderPayload = {
+              userId: Number(order.userId), // Si viene como string
+              deliveryAddress: order.deliveryAddress,
+              paymentTypeId: order.paymentTypeId,
+              paymentStatusId: order.paymentStatusId,
+              products: order.products?.map(p => ({
+                productId: p.productId,
+                quantity: p.quantity,
+                total: p.total
+              }))
+            };
+            this.apiSvc.updatedOrder(order.orderId, orderPayload).subscribe({
+              next: (updateResponse) => {
+                console.log("Orden actualizada:", updateResponse);
+                this.utilsSvc.presentToast({
+                  message: 'Pedido asignado correctamente',
+                  color: 'success',
+                  duration: 2000,
+                });
+                this.getOrders();
+              },
+              error: (updateError) => {
+                console.error("Error al actualizar la orden:", updateError);
+                this.utilsSvc.presentToast({
+                  message: updateError.error?.message || 'Error al asignar el pedido',
+                  color: 'danger',
+                  duration: 2000,
+                });
+              }
+            });
+          },
+          error: (err) => {
+            console.error("Error en la petición:", err);
+            this.utilsSvc.presentToast({
+              message: err.error?.message || 'Error al asignar el pedido',
+              color: 'danger',
+              duration: 2000,
+            });
+          },
         });
-         this.getOrders();
       },
       error: (err) => {
         console.error("Error en la petición:", err);
@@ -197,6 +238,7 @@ export class HomePage implements OnInit {
   }
 
 
+
   // ========= Agregar o actualizar un producto =========
   async addUpdateProduct(Product?: Product) {
     const data = await this.utilsSvc.presentModal({
@@ -207,8 +249,8 @@ export class HomePage implements OnInit {
       },
     });
     if (data?.reload) {
-        console.log("Recargando órdenes...");
-        this.getProducts();
+      console.log("Recargando órdenes...");
+      this.getProducts();
     }
   }
 

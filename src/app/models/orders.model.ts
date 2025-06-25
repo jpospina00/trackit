@@ -7,4 +7,7 @@ export interface Order {
     deliveryAddress: string;
     total: number;
     deliveryName?: string;
+    userDeliveryId?: string;
+    deliveryId?: string;
+    products?: any[];
   }

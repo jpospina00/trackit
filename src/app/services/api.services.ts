@@ -91,12 +91,20 @@ export class ApiService {
         return this.http.get<Notification>(`${this.api}/notifications/${id}`, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
-    assignOrderToCarrier(orderId: string, carrierId: string): Observable<any> {
-        return this.http.patch(`${this.api}/orders/${orderId}/assign`, { carrierId });
+    assignOrderToCarrier(deliveryId: string, userId: string, purchaseId: String): Observable<any> {
+        return this.http.put(`${this.api}/deliveries/${deliveryId}`, { userId, statusId: 2, purchaseId, "delivered": false, }, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     getAvaliableOrders(): Observable<Order[]> {
         return this.http.get<Order[]>(`${this.api}/orders/purchases`, { headers: { Authorization: `Bearer ${this.token}` } });
+    }
+
+    getProductsByOrderId(orderId: string): Observable<any> {
+        return this.http.get(`${this.api}/orders/purchases/${orderId}/products`, {  headers: { Authorization: `Bearer ${this.token}` } });
+    }
+
+    updatedOrder(orderId: string, orderPayload: any): Observable<any> {
+        return this.http.put(`${this.api}/orders/purchases/${orderId}`, orderPayload, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     createOrder(order: any): Observable<any> {
