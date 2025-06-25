@@ -6,4 +6,5 @@ export interface Order {
     paymentTypeId: number;
     deliveryAddress: string;
     total: number;
+    deliveryName?: string;
   }

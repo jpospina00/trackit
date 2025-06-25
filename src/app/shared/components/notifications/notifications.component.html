@@ -8,7 +8,7 @@
       <p>No tienes notificaciones por ahora.</p>
     </div>
 
-    <ion-card *ngFor="let notification of notifications" class="notification-card" [class.read]="!notification.status"
+    <ion-card *ngFor="let notification of notifications" class="notification-card" [class.read]="notification.status"
       (click)="viewNotification(notification)">
       <ion-card-header>
         <ion-card-title>
@@ -18,7 +18,7 @@
       </ion-card-header>
       <ion-card-content>
         <p>{{ notification.description }}</p>
-        <span class="timestamp">{{ notification.createdAt | date:'short' }}</span>
+        <span class="timestamp">{{ notification.createdOn | date:'short' }}</span>
       </ion-card-content>
     </ion-card>
 

@@ -5,6 +5,7 @@ import { Observable, switchMap } from "rxjs";
 import { Order } from "../models/orders.model";
 import { Product } from "../models/products.model";
 import { UtilsService } from "./utils.services";
+import { Notification } from "../models/notification.model";
 
 @Injectable({
     providedIn: 'root'
@@ -95,7 +96,7 @@ export class ApiService {
     }
 
     getAvaliableOrders(): Observable<Order[]> {
-        return this.http.get<Order[]>(`${this.api}/orders/avaliable`);
+        return this.http.get<Order[]>(`${this.api}/orders/purchases`, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     createOrder(order: any): Observable<any> {

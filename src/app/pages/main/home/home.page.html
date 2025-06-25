@@ -78,11 +78,12 @@
   </div>
     <ion-card *ngFor="let pedido of filteredOrders">
       <ion-card-header>
-        <ion-card-title>Pedido #{{ pedido.id }}</ion-card-title>
+        <ion-card-title>Pedido #{{ pedido.orderId }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <p><strong>Dirección:</strong> {{ pedido.address }}</p>
-        <p><strong>Productos:</strong></p>
+        <p><strong>Dirección:</strong> {{ pedido.deliveryAddress }}</p>
+        <p><strong>Estado:</strong> {{ pedido.deliveryName }}</p>
+        <p><strong>Total:</strong> {{ pedido.total }}</p>
         <ion-button expand="block" color="primary" (click)="assignOrderToCarrier(pedido)">
           Aceptar Pedido
         </ion-button>

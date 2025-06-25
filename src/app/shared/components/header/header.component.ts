@@ -107,7 +107,7 @@ export class HeaderComponent  implements OnInit {
         }));
 
         // Supón que todas las notificaciones no leídas tienen un campo `read: false`
-        this.notificationCount = this.notificationsList.filter(n => !n.read).length;
+        this.notificationCount = this.notificationsList.filter(n => !n.status).length;
         console.log('Notificaciones:', this.notificationsList);
       },
       error: (err) => {

@@ -28,12 +28,15 @@ export class NotificationsComponent  implements OnInit {
     if (this.user) {
     this.apiSvc.getNotifications(this.user!.id!).subscribe({
       next: (notis) => {
+        console.log('Description:', notis[0].description!.split('|')[0]);
         this.notifications = notis.map((n: any) => ({
+          ...n,
           id: n.id,
-          message: n.message,
-          // add other Notification properties as needed
-          ...n
+          description: n.description.split('|')[0],
+          title: n.title,
+          
         }));
+        console.log('Notificaciones cargadas:', this.notifications);
         console.log('Notificaciones:', notis);
       },
       error: (err) => {
