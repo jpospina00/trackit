@@ -136,8 +136,9 @@ export class ApiService {
     }
 
     createTestPayment(amount: number, currency: string): Observable<any> {
-  const params = new HttpParams()
-    .set('amount', 200)
+        const roundedAmount: number = Math.round(amount)
+        const params = new HttpParams()
+    .set('amount', roundedAmount)
     .set('currency', currency);
 
   return this.http.post(`${this.api}/orders/purchases/create-test-payment`, null, { params, responseType: 'text' , headers: { Authorization: `Bearer ${this.token}` } },);
