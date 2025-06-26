@@ -30,8 +30,8 @@ export class CheckoutPage implements OnInit {
   }
 
   user(): User {
-        return this.utilsSvc.getLocalStorage('user');
-      }
+    return this.utilsSvc.getLocalStorage('user');
+  }
 
   async confirmPurchase() {
     if (!this.shippingAddress || !this.paymentMethod) {
@@ -51,23 +51,33 @@ export class CheckoutPage implements OnInit {
       userId: this.user().id!,
       deliveryAddress: this.shippingAddress,
       paymentStatusId: 1,
-      paymentTypeId: paymentMethodId,  
+      paymentTypeId: paymentMethodId,
     };
     console.log('Items to purchase:', data);
     try {
       this.apiSvc.createOrder(data).subscribe({
         next: async (order: any) => {
-          this.utilsSvc.routerLink('/main/success');
+          this.apiSvc.createTestPayment(data.total, 'usd').subscribe({
+            next: (paymentUrl: string) => {
+              console.log('Redirigiendo a Stripe Checkout:', paymentUrl);
+              window.location.href = paymentUrl; // Esto carga Stripe Checkout en el navegador
+            },
+            error: (err) => {
+              console.error('Error creando el pago:', err);
+              this.utilsSvc.presentToast({ message: err.message || 'Error al crear el pago', color: 'danger', duration: 2000 });
+            }
+          });
+          // this.utilsSvc.routerLink('/main/success');
         },
         error: (err) => {
           console.error('Error creating order:', err);
           this.utilsSvc.presentToast({ message: err.message || 'Error al crear la orden', color: 'danger', duration: 2000 });
         }
       });
-  // //     this.apiSvc.createTestPayment(data.total, 'usd').subscribe({
-  // //       next: (res) => console.log('Pago de prueba creado:', res),
-  // // error: (err) => console.error('Error al crear pago de prueba:', err)
-  // //     });
+      // //     this.apiSvc.createTestPayment(data.total, 'usd').subscribe({
+      // //       next: (res) => console.log('Pago de prueba creado:', res),
+      // // error: (err) => console.error('Error al crear pago de prueba:', err)
+      // //     });
     } catch (error: any) {
       this.utilsSvc.presentToast({ message: error.message, color: 'danger' });
     }

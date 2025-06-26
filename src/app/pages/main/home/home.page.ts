@@ -160,7 +160,7 @@ export class HomePage implements OnInit {
     this.apiSvc.getAvaliableOrders().subscribe({
       next: (response) => {
         console.log("Respuesta del servidor:", response);
-        this.avalaibleOrders = response;
+        this.avalaibleOrders = response.filter((order: any) => order.deliveryName === 'Processing');
         this.filteredOrders = this.avalaibleOrders;
       },
       error: (err) => {

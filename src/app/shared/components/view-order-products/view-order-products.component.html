@@ -19,7 +19,7 @@
   <ion-button
     expand="block"
     color="primary"
-    *ngIf="role === 'Delivery' && orderStatus !== 'Entregado'"
+    *ngIf="role === 'Delivery' && orderStatus !== 'Delivered'"
     (click)="advanceOrderStatus()"
   >
     Entregado

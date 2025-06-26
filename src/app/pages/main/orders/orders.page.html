@@ -17,9 +17,9 @@
     <ion-item *ngFor="let order of orders" (click)="viewProduct(order.orderId)">
       <ion-label>
         <h2>Pedido #{{ order.orderId }}</h2>
-        <p>Estado: {{ order.paymentStatusId == 1 ? 'Pendiente' : 'entregado' }}</p>
-        <p>Transportista: {{ order.carrier }}</p>
-        <p>Método de pago: {{ order.paymentTypeId == 1 ? 'Tarjeta' : 'Efectivo' }}</p>
+        <p>Estado: {{ order.deliveryName }}</p>
+        <p>Transportista: {{ order.userDeliveryId }}</p>
+        <p>Método de pago: {{ order.paymentTypeId == 1 ? 'Tarjeta de credito' : 'Tarjeta de debito' }}</p>
         <p>Total: {{ order.total | currency:'COP' }}</p>
       </ion-label>
       <ion-icon name="chevron-forward-outline"></ion-icon>

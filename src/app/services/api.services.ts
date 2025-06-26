@@ -92,7 +92,11 @@ export class ApiService {
     }
 
     assignOrderToCarrier(deliveryId: string, userId: string, purchaseId: String): Observable<any> {
-        return this.http.put(`${this.api}/deliveries/${deliveryId}`, { userId, statusId: 2, purchaseId, "delivered": false, }, { headers: { Authorization: `Bearer ${this.token}` } });
+        return this.http.put(`${this.api}/deliveries/${deliveryId}`, { userId, statusId: 3, purchaseId, "delivered": false, }, { headers: { Authorization: `Bearer ${this.token}` } });
+    }
+
+    closeOrder(deliveryId: string, userId: string, purchaseId: String): Observable<any> {
+        return this.http.put(`${this.api}/deliveries/${deliveryId}`, { userId, statusId: 1, purchaseId, "delivered": true, }, { headers: { Authorization: `Bearer ${this.token}` } });
     }
 
     getAvaliableOrders(): Observable<Order[]> {
@@ -133,10 +137,10 @@ export class ApiService {
 
     createTestPayment(amount: number, currency: string): Observable<any> {
   const params = new HttpParams()
-    .set('amount', amount.toString())
+    .set('amount', 200)
     .set('currency', currency);
 
-  return this.http.post(`${this.api}/payments/create-test-payment`, null, { params, headers: { Authorization: `Bearer ${this.token}` } },);
+  return this.http.post(`${this.api}/orders/purchases/create-test-payment`, null, { params, responseType: 'text' , headers: { Authorization: `Bearer ${this.token}` } },);
 }
 
 }

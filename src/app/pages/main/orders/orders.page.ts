@@ -77,6 +77,7 @@ export class OrdersPage implements OnInit {
           role: this.user().role,
           orderId: orderId,
           orderStatus: this.selectedStatus,
+          order: this.orders.find(o => o.orderId === orderId),
         },
       });
 
@@ -105,7 +106,7 @@ export class OrdersPage implements OnInit {
     getOrders() {
     this.apiSvc.getOrdersByUser(this.user().id!).subscribe({
       next: (response) => {
-        console.log("Respuesta del servidor:", response);
+        console.log("Respuesta del servidor 1111:", response);
         this.orders = response;
       },
       error: (err) => {
@@ -120,11 +121,14 @@ export class OrdersPage implements OnInit {
   };
 
   getOrdersCarrier() {
-    this.apiSvc.getOrdersByCarrier(this.user().id!, this.selectedStatus).subscribe({
-      next: (response) => {
-        console.log("Respuesta del servidor:", response);
-        this.orders = response;
-      },
+    this.apiSvc.getAvaliableOrders().subscribe({
+  next: (response) => {
+    console.log("Respuesta del servidor:", this.selectedStatus);
+    const statusFilter = this.selectedStatus === 'En camino' ? 'Shipped' : 'Delivered';
+    console.log("Filtrando pedidos con estado:", statusFilter);
+    this.orders = response.filter((order: any) => order.userDeliveryId === this.user().id! && statusFilter === order.deliveryName);
+    console.log("Respuesta del servidor:", this.orders);
+  },
       error: (err) => {
         console.error("Error en la petición:", err);
         this.utilsSvc.presentToast({
